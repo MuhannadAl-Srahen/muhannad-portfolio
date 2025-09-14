@@ -245,7 +245,7 @@ export default function Hero() {
               />
 
               {/* Gradient Overlay */}
-              <div className='absolute inset-2 rounded-2xl bg-gradient-to-t from-background/20 via-transparent to-transparent pointer-events-none ' />
+              <div className='absolute inset-2 rounded-2xl bg-gradient-to-t from-background/20 via-transparent to-transparent pointer-events-none'/>
             </motion.div>
 
             {/* Floating Particles Around Image */}
