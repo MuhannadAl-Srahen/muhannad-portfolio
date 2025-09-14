@@ -325,12 +325,8 @@ export default function Navbar() {
                         rel='noopener noreferrer'
                         className={cn(
                           'text-muted-foreground hover:text-primary',
-                          'transition-colors duration-200 hover:scale-110 transform'
+                          'transition-colors transition-transform duration-200 hover:scale-110 transform'
                         )}
-                        style={{
-                          transition:
-                            'color 200ms ease-out, transform 200ms ease-out',
-                        }}
                         aria-label={link.name}
                       >
                         <IconComponent size={24} />
