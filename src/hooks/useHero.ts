@@ -49,7 +49,7 @@ export function useHero() {
 
   const handleDownloadCV = () => {
     const link = document.createElement('a')
-    link.href = '/src/assets/Muhannad_Al-Srahen_Resume.pdf'
+    link.href = '/Muhannad_Al-Srahen_Resume.pdf'
     link.download = 'Muhannad_Al-Srahen_Resume.pdf'
     link.click()
   }
