@@ -163,11 +163,7 @@ export default function About() {
                 <div className='absolute inset-0 bg-gradient-to-br from-primary/10 to-accent/10 rounded-2xl blur-xl transform translate-y-6 group-hover:translate-y-8 transition-transform duration-300' />
 
                 {/* Main Image */}
-                <motion.div
-                  className='relative bg-card border border-border/50 rounded-2xl overflow-hidden shadow-xl'
-                  whileHover={{ y: -5 }}
-                  transition={{ duration: 0.3 }}
-                >
+                <div className='relative bg-card border border-border/50 rounded-2xl overflow-hidden shadow-xl hover:-translate-y-1 hover:scale-[1.01] transition-all duration-200 ease-out'>
                   <img
                     src={myImage}
                     alt='Muhannad Al-Srahen - Software Engineer'
@@ -175,7 +171,7 @@ export default function About() {
                   />
                   {/* Subtle Overlay - Fixed to be less prominent */}
                   <div className='absolute inset-0 bg-gradient-to-t from-background/15 via-transparent to-transparent' />
-                </motion.div>
+                </div>
               </div>
             </motion.div>
 
@@ -247,8 +243,7 @@ export default function About() {
                       isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
                     }
                     transition={{ duration: 0.5, delay: 0.6 + index * 0.1 }}
-                    className='group relative bg-background/80 dark:bg-card/60 backdrop-blur-sm border border-border/50 rounded-xl p-4 text-center hover:bg-background/90 dark:hover:bg-card/80 hover:border-primary/40 hover:shadow-lg transition-all duration-200'
-                    whileHover={{ scale: 1.02, y: -2 }}
+                    className='group relative bg-background/80 dark:bg-card/60 backdrop-blur-sm border border-border/50 rounded-xl p-4 text-center hover:bg-background/90 dark:hover:bg-card/80 hover:border-primary/40 hover:shadow-lg hover:scale-[1.02] hover:-translate-y-1 transition-all duration-200 ease-out'
                   >
                     <div className='absolute inset-0 bg-gradient-to-r from-primary/8 to-accent/8 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-200' />
                     <div className='relative'>
