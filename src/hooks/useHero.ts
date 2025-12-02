@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 
-const titles = ['Full Stack Developer', 'Software Engineer', 'UI/UX Developer']
+const titles = ['Full Stack Dev', 'Software Engineer', 'UI/UX Designer', 'Tech Enthusiast']
+
 
 export function useHero() {
   const [currentTitleIndex, setCurrentTitleIndex] = useState(0)
