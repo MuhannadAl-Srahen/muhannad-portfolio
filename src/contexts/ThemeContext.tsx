@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useState } from 'react'
 
 type Theme = 'dark' | 'light' | 'system'
@@ -35,6 +36,9 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
 
+    // Trigger transition by setting data attribute
+    root.setAttribute('data-theme-transition', 'true')
+
     root.classList.remove('light', 'dark')
 
     if (theme === 'system') {
@@ -44,10 +48,16 @@ export function ThemeProvider({
         : 'light'
 
       root.classList.add(systemTheme)
-      return
+    } else {
+      root.classList.add(theme)
     }
 
-    root.classList.add(theme)
+    // Remove transition flag after animation completes
+    const timer = setTimeout(() => {
+      root.removeAttribute('data-theme-transition')
+    }, 250)
+
+    return () => clearTimeout(timer)
   }, [theme])
 
   const value = {

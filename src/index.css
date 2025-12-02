@@ -1,24 +1,24 @@
+
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.21 0.03 264.67);
-  --card: oklch(0.98 0 286.81);
-  --card-foreground: oklch(0.21 0.03 264.67);
-  --popover: oklch(0.98 0 286.81);
-  --popover-foreground: oklch(0.21 0.03 264.67);
+  --background: oklch(0.95 0.01 255);
+  --foreground: oklch(0.25 0.03 264.67);
+  --card: oklch(0.945 0.01 255);
+  --card-foreground: oklch(0.25 0.03 264.67);
+  --popover: oklch(0.945 0.01 255);
+  --popover-foreground: oklch(0.25 0.03 264.67);
   --primary: oklch(0.88 0.18 94.01);
   --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.98 0 286.81);
-  --secondary-foreground: oklch(0.21 0.03 264.67);
-  --muted: oklch(0.97 0 264.7);
-  --muted-foreground: oklch(0.55 0.02 264.37);
+  --secondary: oklch(0.945 0.01 255);
+  --secondary-foreground: oklch(0.25 0.03 264.67);
+  --muted: oklch(0.93 0.01 260);
+  --muted-foreground: oklch(0.58 0.02 264.37);
   --accent: oklch(0.83 0.17 80.01);
   --accent-foreground: oklch(0.15 0 0);
   --destructive: oklch(0.64 0.21 25.33);
-  --border: oklch(0.93 0.01 264.6);
-  --input: oklch(0.93 0.01 264.6);
+  --border: oklch(0.88 0.01 264.6);
+  --input: oklch(0.88 0.01 264.6);
   --ring: oklch(0.88 0.18 94.01);
   --chart-1: oklch(0.65 0.22 36.85);
   --chart-2: oklch(0.6 0.11 184.15);
@@ -34,9 +34,11 @@
   --sidebar-border: oklch(0.93 0.01 264.6);
   --sidebar-ring: oklch(0.62 0.19 259.81);
 
-  --font-sans: Poppins, sans-serif;
-  --font-serif: Nunito, sans-serif;
-  --font-mono: Fira Code, monospace;
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+    'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-mono: ui-monospace, 'SF Mono', Monaco, 'Cascadia Mono', 'Segoe UI Mono',
+    'Roboto Mono', 'Ubuntu Mono', Menlo, Consolas, 'Courier New', monospace;
 
   --radius: 1.025rem;
 
@@ -160,8 +162,285 @@
     outline-color: var(--color-ring);
     outline-offset: 2px;
   }
+  
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
   }
+  
+  /* Global smooth transitions for theme changes - applies when theme is switching */
+  html[data-theme-transition="true"] * {
+    transition-property: background-color, border-color, color, box-shadow, outline-color, fill, stroke !important;
+    transition-duration: 250ms !important;
+    transition-timing-function: ease-in-out !important;
+  }
+  
+  /* Preserve Tailwind hover/interactive transitions */
+  html[data-theme-transition="true"] [class*="hover"]:hover,
+  html[data-theme-transition="true"] [class*="focus"]:focus,
+  html[data-theme-transition="true"] [class*="active"]:active {
+    transition-property: all;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* Theme transition utilities */
+@layer utilities {
+  /* No additional utilities needed - transitions are handled at base layer */
+}
+
+/* ===== Scrollbar Utilities ===== */
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* ===== Custom Animations ===== */
+
+/* Flying orb animation - moves in elliptical path */
+@keyframes float-orb {
+  0%, 100% {
+    transform: translate(0, 0) scale(0.8);
+    opacity: 0.2;
+  }
+  25% {
+    transform: translate(100px, -60px) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(150px, 0) scale(1.2);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(80px, 50px) scale(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes float-orb-reverse {
+  0%, 100% {
+    transform: translate(0, 0) scale(1);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(-60px, 80px) scale(0.8);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-80px, 120px) scale(1.1);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(-40px, 60px) scale(0.9);
+    opacity: 0.6;
+  }
+}
+
+/* Floating particles around image */
+@keyframes float-particle {
+  0%, 100% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-25px) scale(1.2);
+    opacity: 1;
+  }
+}
+
+/* Slow pulse for large background orbs */
+@keyframes pulse-slow {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.5;
+  }
+}
+
+/* Breathing animation for ambient lights */
+@keyframes breathe {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.2;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.4;
+  }
+}
+
+/* Slow spin for decorative elements */
+@keyframes spin-slow {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spin-slow-reverse {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0deg);
+  }
+}
+
+/* Scroll-triggered fade in */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animation utility classes */
+.animate-float-orb {
+  animation: float-orb 12s ease-in-out infinite;
+}
+
+.animate-float-orb-reverse {
+  animation: float-orb-reverse 15s ease-in-out infinite;
+}
+
+.animate-float-particle {
+  animation: float-particle 4s ease-in-out infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 20s ease-in-out infinite;
+}
+
+.animate-breathe {
+  animation: breathe 18s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+.animate-spin-slow-reverse {
+  animation: spin-slow-reverse 15s linear infinite;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.6s ease-out forwards;
+}
+
+/* 3D Perspective for text animations */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+/* 3D Card Flip Styles */
+.preserve-3d {
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+}
+
+.backface-hidden {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+}
+
+.rotate-y-180 {
+  transform: rotateY(180deg);
+}
+
+/* Fix for 3D flip card - prevent content bleeding through */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  /* Transition is now handled inline in component for better control */
+  transform-style: preserve-3d;
+  -webkit-transform-style: preserve-3d;
+  /* GPU acceleration for smooth flip */
+  -webkit-perspective: 1200px;
+  perspective: 1200px;
+}
+
+.flip-card-face {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  -moz-backface-visibility: hidden;
+  /* GPU acceleration */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Hardware acceleration hints */
+  will-change: transform;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Front face - slightly forward */
+.flip-card-face:not(.flip-card-back) {
+  z-index: 2;
+  transform: rotateY(0deg) translateZ(1px);
+}
+
+.flip-card-back {
+  transform: rotateY(180deg) translateZ(1px);
+  z-index: 1;
+}
+
+/* Staggered animation delays */
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
+
+/* Modal Animations */
+@keyframes modalSlideIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalFadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+/* Hide navbar when modal is open */
+body.modal-open header,
+body.modal-open nav,
+body.modal-open [data-navbar] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+  z-index: 0 !important;
 }
