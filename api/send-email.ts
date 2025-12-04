@@ -30,7 +30,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     // Send email using Resend
     const { data, error } = await resend.emails.send({
-      from: 'Portfolio Contact <onboarding@resend.dev>',
+      from: 'Muhannad <mail@muhannadalsrahen.dev>',
       to: 'muhannadalsrahen@gmail.com',
       replyTo: email,
       subject: subject || `New message from ${name}`,
@@ -65,12 +65,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (error) {
       console.error('Resend error:', error)
-      return res.status(500).json({ error: 'Failed to send email' })
+      return res.status(500).json({ 
+        error: 'Failed to send email',
+        details: error?.message || 'Unknown error'
+      })
     }
 
-    return res.status(200).json({ success: true, messageId: data?.id })
+    console.log('Email sent successfully:', data?.id)
+    return res.status(200).json({ 
+      success: true, 
+      messageId: data?.id,
+      message: 'Email sent successfully! You should receive a confirmation soon.'
+    })
   } catch (error) {
     console.error('Server error:', error)
-    return res.status(500).json({ error: 'Internal server error' })
+    const errorMessage = error instanceof Error ? error.message : String(error)
+    return res.status(500).json({ 
+      error: 'Internal server error',
+      details: errorMessage
+    })
   }
 }
