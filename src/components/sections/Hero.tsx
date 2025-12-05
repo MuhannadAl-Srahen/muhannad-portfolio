@@ -250,7 +250,7 @@ export default function Hero() {
           </div>
 
           {/* Supporting Text */}
-          <div className='space-y-6 text-lg md:text-xl text-muted-foreground max-w-2xl'>
+          <div className='space-y-6 text-lg md:text-xl text-foreground/80 max-w-2xl'>
             <p className='hero-supporting-text'>
               I design and implement polished — focused on{' '}
               <span className='text-primary font-semibold'>clarity</span>,{' '}
@@ -317,7 +317,11 @@ export default function Hero() {
                 <img
                   src={headshotImage}
                   alt='Muhannad Al-Srahen - Frontend Developer'
-                  className='w-full max-w-md object-cover aspect-4/5 group-hover:scale-105 transition-transform duration-400 ease-out'
+                  className='w-full max-w-md object-cover aspect-[4/5] group-hover:scale-105 transition-transform duration-400 ease-out'
+                  width='400'
+                  height='500'
+                  fetchPriority='high'
+                  loading='eager'
                 />
 
                 {/* Gradient Overlay */}

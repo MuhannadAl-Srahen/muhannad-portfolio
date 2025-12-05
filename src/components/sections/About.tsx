@@ -114,13 +114,13 @@ export default function About() {
                   Hi, I'm <span className='text-primary'>Muhannad</span>
                   <span className='text-2xl sm:text-3xl'>👋</span>
                 </h3>
-                <div className='space-y-4 text-base leading-relaxed text-muted-foreground'>
+                <div className='space-y-4 text-base leading-relaxed text-foreground/75'>
                   <p>
                     I'm a <span className='text-primary font-semibold'>software engineer</span> who loves building <span className='text-primary font-semibold'>products</span> that make a difference. 
                     I combine <span className='text-primary font-semibold'>technical expertise</span> with creative problem-solving to deliver 
                     exceptional digital experiences.
                   </p>
-                  <p>
+                  <p className='text-foreground/75'>
                     My goal is to write <span className='text-primary font-semibold'>clean, maintainable code</span> that not only works great 
                     but is also a joy to work with for other developers.
                   </p>
