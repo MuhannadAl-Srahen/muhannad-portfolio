@@ -207,8 +207,8 @@ export default function Contact() {
   }
 
   const inputClasses = (fieldName: string, hasError: boolean) => `
-    w-full px-4 py-3 bg-card/50 border-2 rounded-xl
-    text-foreground placeholder:text-muted-foreground/60
+    w-full px-3 py-2.5 sm:px-4 sm:py-3 bg-card/50 border-2 rounded-lg sm:rounded-xl
+    text-sm sm:text-base text-foreground placeholder:text-muted-foreground/60
     transition-all duration-300 ease-out outline-none
     ${
       hasError
@@ -245,10 +245,10 @@ export default function Contact() {
             {/* Contact Info & Social Links */}
             <div
               ref={infoRef}
-              className='lg:col-span-1 space-y-6 opacity-0 -translate-x-8 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0'
+              className='lg:col-span-1 space-y-4 sm:space-y-6 opacity-0 -translate-x-8 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0'
             >
               {/* Quick Contact Cards */}
-              <div className='space-y-4'>
+              <div className='space-y-3 sm:space-y-4'>
                 <a
                   href='mailto:muhannadalsrahen@gmail.com'
                   className='block'
@@ -258,9 +258,9 @@ export default function Contact() {
                     className='group'
                     padding='md'
                   >
-                    <div className='flex items-center gap-4'>
-                      <div className='shrink-0 w-12 h-12 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300'>
-                        <Mail className='w-5 h-5 text-primary' />
+                    <div className='flex items-center gap-3 sm:gap-4'>
+                      <div className='shrink-0 w-11 h-11 sm:w-12 sm:h-12 bg-primary/10 border border-primary/20 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300'>
+                        <Mail className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
                       </div>
                       <div className='flex-1 min-w-0'>
                         <p className='font-medium text-foreground group-hover:text-primary transition-colors duration-300 ease-out'>
@@ -276,9 +276,9 @@ export default function Contact() {
                 </a>
 
                 <Card hoverable={true} padding='md' className='group'>
-                  <div className='flex items-center gap-4'>
-                    <div className='w-12 h-12 bg-accent/10 border border-accent/20 rounded-xl flex items-center justify-center group-hover:border-accent/30 transition-colors duration-300 ease-out'>
-                      <MapPin className='w-5 h-5 text-accent' />
+                  <div className='flex items-center gap-3 sm:gap-4'>
+                    <div className='w-11 h-11 sm:w-12 sm:h-12 bg-accent/10 border border-accent/20 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:border-accent/30 transition-colors duration-300 ease-out'>
+                      <MapPin className='w-4 h-4 sm:w-5 sm:h-5 text-accent' />
                     </div>
                     <div>
                       <p className='font-medium text-foreground group-hover:text-accent transition-colors duration-300 ease-out'>Location</p>
@@ -290,9 +290,9 @@ export default function Contact() {
                 </Card>
 
                 <Card hoverable={true} padding='md' className='group'>
-                  <div className='flex items-center gap-4'>
-                    <div className='w-12 h-12 bg-primary/10 border border-primary/20 rounded-xl flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300 ease-out'>
-                      <Clock className='w-5 h-5 text-primary' />
+                  <div className='flex items-center gap-3 sm:gap-4'>
+                    <div className='w-11 h-11 sm:w-12 sm:h-12 bg-primary/10 border border-primary/20 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300 ease-out'>
+                      <Clock className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
                     </div>
                     <div>
                       <p className='font-medium text-foreground group-hover:text-primary transition-colors duration-300 ease-out'>Local Time</p>
@@ -305,11 +305,11 @@ export default function Contact() {
               </div>
 
               {/* Social Links */}
-              <div className='space-y-4'>
-                <h4 className='text-lg font-semibold text-foreground'>
+              <div className='space-y-3 sm:space-y-4'>
+                <h4 className='text-base sm:text-lg font-semibold text-foreground'>
                   Find me on
                 </h4>
-                <div className='grid grid-cols-2 gap-3'>
+                <div className='grid grid-cols-2 gap-2 sm:gap-3'>
                   {socialLinks.map((link) => {
                     const IconComponent = link.icon
                     return (
@@ -359,8 +359,8 @@ export default function Contact() {
                     </p>
                   </div>
                 ) : (
-                  <div className='space-y-6'>
-                    <div className='grid md:grid-cols-2 gap-6'>
+                  <div className='space-y-4 sm:space-y-6'>
+                    <div className='grid md:grid-cols-2 gap-4 sm:gap-6'>
                       {/* Name Field */}
                       <div className='space-y-2'>
                         <label
@@ -457,7 +457,7 @@ export default function Contact() {
                         onChange={handleChange}
                         onFocus={() => setFocusedField('message')}
                         onBlur={() => setFocusedField(null)}
-                        placeholder="Tell me about your project or just say hi..."
+                        placeholder="Tell me about your project..."
                         rows={5}
                         className={`${inputClasses('message', !!errors.message)} resize-none`}
                       />
@@ -472,7 +472,7 @@ export default function Contact() {
                     <button
                       type='submit'
                       disabled={isSubmitting}
-                      className='group w-full flex items-center justify-center gap-2 px-6 py-4 bg-primary text-primary-foreground rounded-xl font-medium text-lg hover:bg-primary/90 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer transition-all duration-300 ease-out'
+                      className='group w-full flex items-center justify-center gap-2 px-5 py-3 sm:px-6 sm:py-4 bg-primary text-primary-foreground rounded-lg sm:rounded-xl font-medium text-base sm:text-lg hover:bg-primary/90 hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed disabled:hover:scale-100 cursor-pointer transition-all duration-300 ease-out'
                     >
                       {isSubmitting ? (
                         <>
