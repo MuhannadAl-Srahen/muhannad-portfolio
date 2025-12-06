@@ -84,7 +84,7 @@ export default function Skills() {
                     </h3>
 
                     {/* Category Description */}
-                    <p className='text-sm text-muted-foreground mb-4 leading-relaxed'>
+                    <p className='text-sm text-foreground/70 mb-4 leading-relaxed'>
                       {category.description}
                     </p>
 
