@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://muhannadalsrahen.dev/sitemap.xml
+
+# Google Search Console crawlers
+User-agent: Googlebot
+Allow: /
+
+# Bing crawlers
+User-agent: Bingbot
+Allow: /
+
+# Yandex crawlers
+User-agent: YandexBot
+Allow: /

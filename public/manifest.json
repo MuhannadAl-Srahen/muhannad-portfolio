@@ -1,0 +1,33 @@
+{
+  "name": "Muhannad Al-Srahen Portfolio",
+  "short_name": "Muhannad Portfolio",
+  "description": "Full Stack Developer Portfolio - React, TypeScript, Node.js",
+  "start_url": "https://muhannadalsrahen.dev",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#f5c542",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "192x192",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "512x512",
+      "type": "image/x-icon",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["technology", "portfolio"],
+  "screenshots": [
+    {
+      "src": "/og-preview.webp",
+      "sizes": "1200x630",
+      "type": "image/webp",
+      "form_factor": "wide"
+    }
+  ]
+}
