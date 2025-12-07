@@ -131,6 +131,8 @@ export default function Hero() {
               { left: 45, top: 80 },
             ]
             const pos = positions[i] || { left: 10, top: 50 }
+            // Show only first 4 on mobile
+            if (i >= 4 && window.innerWidth < 768) return null
             return (
               <div
                 key={i}
@@ -228,15 +230,15 @@ export default function Hero() {
                 <div className='absolute -top-6 -left-6 w-12 h-12 border-2 border-primary/40 rounded-lg animate-spin-slow' />
                 <div className='absolute -bottom-6 -right-6 w-10 h-10 bg-accent/25 rounded-full animate-spin-slow-reverse' />
                 
-                {/* Floating orbs on the right side */}
+                {/* Floating orbs on the right side (2 on mobile) */}
                 <div className='absolute -right-16 top-1/4 w-4 h-4 bg-primary/50 rounded-full animate-image-orb' />
                 <div className='absolute -right-12 top-1/2 w-3 h-3 bg-accent/60 rounded-full animate-image-orb' style={{ animationDelay: '0.5s' }} />
-                <div className='absolute -right-20 top-2/3 w-5 h-5 bg-primary/40 rounded-full animate-image-orb' style={{ animationDelay: '1s' }} />
-                <div className='absolute -right-14 bottom-1/4 w-3 h-3 bg-primary/60 rounded-full animate-image-orb' style={{ animationDelay: '1.5s' }} />
+                <div className='absolute -right-20 top-2/3 w-5 h-5 bg-primary/40 rounded-full animate-image-orb max-md:hidden' style={{ animationDelay: '1s' }} />
+                <div className='absolute -right-14 bottom-1/4 w-3 h-3 bg-primary/60 rounded-full animate-image-orb max-md:hidden' style={{ animationDelay: '1.5s' }} />
                 
-                {/* A couple on the left too */}
+                {/* A couple on the left too (1 on mobile) */}
                 <div className='absolute -left-12 top-1/3 w-3 h-3 bg-accent/50 rounded-full animate-image-orb' style={{ animationDelay: '0.8s' }} />
-                <div className='absolute -left-16 bottom-1/3 w-4 h-4 bg-primary/45 rounded-full animate-image-orb' style={{ animationDelay: '1.2s' }} />
+                <div className='absolute -left-16 bottom-1/3 w-4 h-4 bg-primary/45 rounded-full animate-image-orb max-md:hidden' style={{ animationDelay: '1.2s' }} />
             </>
 
             {/* Main Image Container */}
