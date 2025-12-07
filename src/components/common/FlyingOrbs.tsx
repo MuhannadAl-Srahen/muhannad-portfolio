@@ -18,14 +18,16 @@ export default function FlyingOrbs({ variant = 'default' }: FlyingOrbsProps) {
 
   return (
     <div className='absolute inset-0 z-0 pointer-events-none'>
-      {/* 5 orbs with random circular movements */}
+      {/* 5 orbs with random circular movements (3 on mobile) */}
       {[...Array(5)].map((_, i) => {
         const animations = ['orb-float-1', 'orb-float-2', 'orb-float-3', 'orb-float-4', 'orb-float-1']
         const isAccent = i >= 3
+        // Hide orbs 3 and 4 on mobile (keep first 3 only)
+        const hideOnMobile = i >= 3
         return (
           <div
             key={`orb-${i}`}
-            className={`absolute rounded-full ${isAccent ? 'w-2 h-2 bg-accent/60' : 'w-3 h-3 bg-primary/50'}`}
+            className={`absolute rounded-full ${isAccent ? 'w-2 h-2 bg-accent/60' : 'w-3 h-3 bg-primary/50'} ${hideOnMobile ? 'max-md:hidden' : ''}`}
             style={{
               left: i < 3 ? `${offset.primary + i * 25}%` : undefined,
               right: i >= 3 ? `${offset.accent + (i - 3) * 25}%` : undefined,

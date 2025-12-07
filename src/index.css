@@ -251,8 +251,13 @@ html {
   /* Global smooth transitions for theme changes - applies when theme is switching */
   html[data-theme-transition="true"] * {
     transition-property: background-color, border-color, color, box-shadow, outline-color, fill, stroke !important;
-    transition-duration: 250ms !important;
+    transition-duration: 200ms !important;
     transition-timing-function: ease-in-out !important;
+  }
+  
+  /* Optimize repainting during theme switch */
+  html[data-theme-transition="true"] {
+    will-change: background-color;
   }
   
   /* Preserve Tailwind hover/interactive transitions */
@@ -262,6 +267,12 @@ html {
     transition-property: all;
     transition-duration: 200ms;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  /* Pause expensive animations during theme transition for better performance */
+  html[data-theme-transition="true"] [class*="animate-"],
+  html[data-theme-transition="true"] [style*="animation"] {
+    animation-play-state: paused !important;
   }
 }
 
