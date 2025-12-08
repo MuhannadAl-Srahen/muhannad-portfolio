@@ -7,6 +7,8 @@ import { SectionHeader, FlyingOrbs } from '@/components/common'
 // Image Gallery Component with arrows
 function ImageGallery({ images, title }: { images: string[]; title: string }) {
   const [currentIndex, setCurrentIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
 
   // Handle empty images array for coming soon projects
   if (!images || images.length === 0) {
@@ -30,8 +32,41 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
     setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
   }
 
+  // Touch swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX)
+  }
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return
+    
+    const distance = touchStart - touchEnd
+    const isLeftSwipe = distance > 50
+    const isRightSwipe = distance < -50
+
+    if (isLeftSwipe) {
+      setCurrentIndex((prev) => (prev + 1) % images.length)
+    }
+    if (isRightSwipe) {
+      setCurrentIndex((prev) => (prev - 1 + images.length) % images.length)
+    }
+
+    // Reset
+    setTouchStart(0)
+    setTouchEnd(0)
+  }
+
   return (
-    <div className='relative h-full w-full group/gallery'>
+    <div 
+      className='relative h-full w-full group/gallery'
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       <img
         src={images[currentIndex]}
         srcSet={`${images[currentIndex]}?w=600 600w, ${images[currentIndex]}?w=900 900w, ${images[currentIndex]}?w=1200 1200w`}
@@ -45,26 +80,26 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
       {/* Dark overlay - only on hover */}
       <div className='absolute inset-0 bg-transparent group-hover/gallery:bg-black/40 transition-all duration-300 pointer-events-none' />
       
-      {/* Navigation Arrows - Only show on hover and if multiple images */}
+      {/* Navigation Arrows - Only show on desktop hover */}
       {images.length > 1 && (
         <>
           <button
             onClick={prevImage}
-            className='absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/60 hover:bg-primary text-white hover:text-black rounded-full flex items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition-all duration-300 hover:scale-110 z-10 cursor-pointer'
+            className='hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/60 hover:bg-primary text-white hover:text-black rounded-full items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition-all duration-300 hover:scale-110 z-10 cursor-pointer'
             aria-label='Previous image'
           >
             <ChevronLeft className='w-5 h-5' />
           </button>
           <button
             onClick={nextImage}
-            className='absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/60 hover:bg-primary text-white hover:text-black rounded-full flex items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition-all duration-300 hover:scale-110 z-10 cursor-pointer'
+            className='hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/60 hover:bg-primary text-white hover:text-black rounded-full items-center justify-center opacity-0 group-hover/gallery:opacity-100 transition-all duration-300 hover:scale-110 z-10 cursor-pointer'
             aria-label='Next image'
           >
             <ChevronRight className='w-5 h-5' />
           </button>
           
-          {/* Dots indicator */}
-          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300 z-10'>
+          {/* Dots indicator - always visible on mobile/tablet, hover on desktop */}
+          <div className='absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 opacity-100 lg:opacity-0 lg:group-hover/gallery:opacity-100 transition-opacity duration-300 z-10'>
             {images.map((_, idx) => (
               <button
                 key={idx}
@@ -328,20 +363,24 @@ export default function ProjectsNew() {
       
       {/* Decorative floating particles */}
       <div className='absolute inset-0 z-0 pointer-events-none'>
-        {[...Array(4)].map((_, i) => (
-          <div
-            key={i}
-            className='absolute w-2.5 h-2.5 bg-primary/35 rounded-full animate-float-orb'
-            style={{
-              left: `${8 + i * 20}%`,
-              bottom: `${15 + (i * 20) % 50}%`,
-              animationDuration: `${12 + i}s`,
-            }}
-          />
-        ))}
+        {[...Array(4)].map((_, i) => {
+          // Show only first 2 on mobile
+          if (i >= 2 && window.innerWidth < 768) return null
+          return (
+            <div
+              key={i}
+              className='absolute w-2.5 h-2.5 bg-primary/35 rounded-full animate-float-orb'
+              style={{
+                left: `${8 + i * 20}%`,
+                bottom: `${15 + (i * 20) % 50}%`,
+                animationDuration: `${12 + i}s`,
+              }}
+            />
+          )
+        })}
       </div>
 
-      {/* Additional side orbs */}
+      {/* Additional side orbs (4 on mobile, 6 on desktop) */}
       <div className='absolute inset-0 z-0 pointer-events-none'>
         {/* Left side orbs */}
         <div 
@@ -353,7 +392,7 @@ export default function ProjectsNew() {
           }}
         />
         <div 
-          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          className='absolute w-2 h-2 bg-accent/60 rounded-full max-md:hidden'
           style={{
             left: '8%',
             top: '45%',
@@ -371,7 +410,7 @@ export default function ProjectsNew() {
         
         {/* Right side orbs */}
         <div 
-          className='absolute w-2 h-2 bg-accent/55 rounded-full'
+          className='absolute w-2 h-2 bg-accent/55 rounded-full max-md:hidden'
           style={{
             right: '7%',
             top: '20%',
@@ -387,7 +426,7 @@ export default function ProjectsNew() {
           }}
         />
         <div 
-          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          className='absolute w-2 h-2 bg-accent/60 rounded-full max-md:hidden'
           style={{
             right: '9%',
             bottom: '20%',
@@ -440,8 +479,8 @@ export default function ProjectsNew() {
 
                     {/* Image Section */}
                     <div className={`relative group ${isEven ? '' : 'lg:col-start-2'}`}>
-                      <div className='absolute -inset-4 bg-linear-to-br from-primary/30 to-accent/30 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700' />
-                      <div className='relative overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-border/50 group-hover:border-primary/50 shadow-2xl transition-all duration-500 h-[280px] sm:h-[350px] md:h-[400px]'>
+                      <div className='absolute -inset-4 bg-linear-to-br from-primary/30 to-accent/30 rounded-3xl blur-2xl opacity-0 md:group-hover:opacity-100 transition-all duration-700' />
+                      <div className='relative overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-border/50 md:group-hover:border-primary/50 shadow-2xl transition-all duration-500 h-[280px] sm:h-[350px] md:h-[400px]'>
                         <ImageGallery images={project.images} title={project.title} />
                         
                         {/* Floating Tags */}
@@ -454,7 +493,7 @@ export default function ProjectsNew() {
                           </span>
                         </div>
 
-                        {/* Bottom overlay */}
+                        {/* Bottom overlay - hidden on mobile, hover on desktop */}
                         <div className='absolute bottom-0 left-0 right-0 p-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-500 z-20'>
                           <div className='flex gap-3'>
                             {project.technologies.slice(0, 3).map((tech) => {
