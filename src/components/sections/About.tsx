@@ -60,20 +60,24 @@ export default function About() {
 
       {/* Decorative floating particles */}
       <div className='absolute inset-0 z-0 pointer-events-none'>
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={i}
-            className='absolute w-2 h-2 bg-primary/40 rounded-full animate-float-orb'
-            style={{
-              left: `${15 + i * 15}%`,
-              top: `${20 + (i * 18) % 70}%`,
-              animationDuration: `${10 + i}s`,
-            }}
-          />
-        ))}
+        {[...Array(5)].map((_, i) => {
+          // Show only first 3 on mobile
+          if (i >= 3 && window.innerWidth < 768) return null
+          return (
+            <div
+              key={i}
+              className='absolute w-2 h-2 bg-primary/40 rounded-full animate-float-orb'
+              style={{
+                left: `${15 + i * 15}%`,
+                top: `${20 + (i * 18) % 70}%`,
+                animationDuration: `${10 + i}s`,
+              }}
+            />
+          )
+        })}
       </div>
 
-      {/* Additional side orbs */}
+      {/* Additional side orbs (4 on mobile, 6 on desktop) */}
       <div className='absolute inset-0 z-0 pointer-events-none'>
         {/* Left side orbs */}
         <div 
@@ -85,7 +89,7 @@ export default function About() {
           }}
         />
         <div 
-          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          className='absolute w-2 h-2 bg-accent/60 rounded-full max-md:hidden'
           style={{
             left: '8%',
             top: '45%',
@@ -103,7 +107,7 @@ export default function About() {
         
         {/* Right side orbs */}
         <div 
-          className='absolute w-2 h-2 bg-accent/55 rounded-full'
+          className='absolute w-2 h-2 bg-accent/55 rounded-full max-md:hidden'
           style={{
             right: '7%',
             top: '20%',
@@ -119,7 +123,7 @@ export default function About() {
           }}
         />
         <div 
-          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          className='absolute w-2 h-2 bg-accent/60 rounded-full max-md:hidden'
           style={{
             right: '9%',
             bottom: '20%',
