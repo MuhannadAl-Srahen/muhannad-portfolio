@@ -14,7 +14,7 @@ interface OptimizedImageProps {
 }
 
 /**
- * Optimized image component with loading state and lazy loading
+ * Optimized image component with loading state, lazy loading, and proper sizing
  */
 export function OptimizedImage({
   src,
@@ -31,6 +31,12 @@ export function OptimizedImage({
       loading={priority ? 'eager' : 'lazy'}
       decoding='async'
       onLoad={onLoad}
+      style={{
+        width: '100%',
+        height: 'auto',
+        objectFit: 'cover',
+        aspectRatio: 'auto'
+      }}
     />
   )
 }
