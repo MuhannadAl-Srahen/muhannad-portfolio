@@ -55,7 +55,7 @@ export function ThemeProvider({
     // Remove transition flag after animation completes
     const timer = setTimeout(() => {
       root.removeAttribute('data-theme-transition')
-    }, 250)
+    }, 200)
 
     return () => clearTimeout(timer)
   }, [theme])
