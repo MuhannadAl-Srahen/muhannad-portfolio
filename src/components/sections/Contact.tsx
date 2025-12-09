@@ -230,7 +230,7 @@ export default function Contact() {
     >
       <FlyingOrbs variant='default' />
 
-      {/* Additional side orbs - positioned on edges to avoid covering form */}
+      {/* Additional side orbs - positioned on edges to avoid covering form (4 on mobile, 6 on desktop) */}
       <div className='absolute inset-0 z-0 pointer-events-none'>
         {/* Left side orbs */}
         <div 
@@ -242,7 +242,7 @@ export default function Contact() {
           }}
         />
         <div 
-          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          className='absolute w-2 h-2 bg-accent/60 rounded-full max-md:hidden'
           style={{
             left: '8%',
             top: '45%',
@@ -260,7 +260,7 @@ export default function Contact() {
         
         {/* Right side orbs */}
         <div 
-          className='absolute w-2 h-2 bg-accent/55 rounded-full'
+          className='absolute w-2 h-2 bg-accent/55 rounded-full max-md:hidden'
           style={{
             right: '7%',
             top: '20%',
@@ -276,7 +276,7 @@ export default function Contact() {
           }}
         />
         <div 
-          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          className='absolute w-2 h-2 bg-accent/60 rounded-full max-md:hidden'
           style={{
             right: '9%',
             bottom: '20%',
