@@ -4,6 +4,7 @@ import { useTheme } from '@/contexts/ThemeContext'
 import { navItems, socialLinks } from '@/config/navigation'
 import { cn } from '@/lib/utils'
 import { logoDark, logoLight } from '@/assets'
+import gsap from 'gsap'
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme()
@@ -13,12 +14,35 @@ export default function Navbar() {
   const [hideOnMobile, setHideOnMobile] = useState(false)
   const manualActiveRef = useRef<string | null>(null)
   const lastScrollY = useRef(0)
+  const navbarRef = useRef<HTMLDivElement>(null)
 
   // Scroll detection with mobile hide/show
   useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY
-      setIsScrolled(currentScrollY > 60)
+      const wasScrolled = isScrolled
+      const nowScrolled = currentScrollY > 60
+      
+      setIsScrolled(nowScrolled)
+      
+      // Animate navbar when it becomes sticky
+      if (!wasScrolled && nowScrolled && navbarRef.current) {
+        gsap.fromTo(
+          navbarRef.current,
+          { 
+            y: -20, 
+            opacity: 0,
+            scale: 0.95
+          },
+          { 
+            y: 0, 
+            opacity: 1,
+            scale: 1,
+            duration: 0.4,
+            ease: 'power2.out'
+          }
+        )
+      }
 
       // Mobile navbar hide/show logic (only on mobile < 1024px)
       if (window.innerWidth < 1024) {
@@ -115,6 +139,7 @@ export default function Navbar() {
         )}
       >
         <div
+          ref={navbarRef}
           className={cn(
             'transition-all duration-300',
             isScrolled
@@ -137,7 +162,7 @@ export default function Navbar() {
               <img
                 src={theme === 'dark' ? logoLight : logoDark}
                 alt='Logo'
-                className='h-9 w-9 sm:h-10 sm:w-10 object-contain hover:scale-105 transition-transform duration-300 ease-out'
+                className='h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform duration-200 ease-out'
               />
             </button>
 
@@ -155,7 +180,7 @@ export default function Navbar() {
                       'transition-all duration-200 ease-out',
                       isActive
                         ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/40 hover:-translate-y-0.5'
+                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
                     )}
                     aria-current={isActive ? 'page' : undefined}
                   >
@@ -171,7 +196,7 @@ export default function Navbar() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className='p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors duration-300 ease-out cursor-pointer'
+                className='p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors duration-200 ease-out cursor-pointer'
                 aria-label='Toggle theme'
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -180,7 +205,7 @@ export default function Navbar() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className='lg:hidden p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors duration-300 ease-out cursor-pointer'
+                className='lg:hidden p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors duration-200 ease-out cursor-pointer'
                 aria-label='Open menu'
               >
                 <Menu size={22} />
@@ -239,7 +264,7 @@ export default function Navbar() {
                     'transition-all duration-200 ease-out',
                     isActive
                       ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50 hover:-translate-y-0.5'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
                   )}
                   aria-current={isActive ? 'page' : undefined}
                 >
