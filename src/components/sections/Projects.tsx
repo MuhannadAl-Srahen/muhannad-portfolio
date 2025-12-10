@@ -35,7 +35,8 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
       <img
         src={images[currentIndex]}
         alt={`${title} - Image ${currentIndex + 1}`}
-        className='w-full h-full object-cover transition-transform duration-500 group-hover:scale-110'
+        className='w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110'
+        style={{ minHeight: '100%' }}
       />
       
       {/* Dark overlay - only on hover */}
@@ -87,7 +88,7 @@ function FlipCard({ project }: { project: Project }) {
 
   return (
     <div
-      className='relative h-[480px] cursor-pointer'
+      className='relative h-[480px] sm:h-[520px] cursor-pointer'
       onClick={() => setIsFlipped(!isFlipped)}
     >
       {/* Front of Card */}
@@ -102,7 +103,7 @@ function FlipCard({ project }: { project: Project }) {
         }}
       >
           {/* Image Gallery */}
-          <div className='relative h-48 overflow-hidden bg-muted/20'>
+          <div className='relative h-40 sm:h-48 overflow-hidden bg-muted/20'>
             <ImageGallery images={project.images} title={project.title} />
             
             {/* Badges */}
@@ -118,11 +119,11 @@ function FlipCard({ project }: { project: Project }) {
 
           {/* Content */}
           <div className='p-5 flex flex-col'>
-            <h4 className='text-lg font-bold text-foreground mb-2'>
+            <h3 className='text-lg font-bold text-foreground mb-2'>
               {project.title}
-            </h4>
+            </h3>
             
-            <p className='text-sm text-muted-foreground mb-4 leading-relaxed line-clamp-2'>
+            <p className='text-sm text-foreground/75 mb-4 leading-relaxed line-clamp-2'>
               {project.description}
             </p>
 
@@ -165,9 +166,9 @@ function FlipCard({ project }: { project: Project }) {
             {/* Header */}
             <div className='pb-3 border-b border-primary/20'>
               <div className='flex items-center justify-between gap-2 mb-1'>
-                <h4 className='text-lg font-bold text-primary'>
+                <h3 className='text-lg font-bold text-primary'>
                   {project.title}
-                </h4>
+                </h3>
                 <span className='px-2 py-0.5 bg-primary/10 text-primary text-xs font-bold rounded-full'>
                   {project.category}
                 </span>
@@ -179,10 +180,10 @@ function FlipCard({ project }: { project: Project }) {
 
             {/* KEY FEATURES */}
             <div className='py-3 border-b border-border/50'>
-              <h5 className='text-sm font-bold text-foreground uppercase tracking-wide mb-2 flex items-center gap-2'>
+              <h4 className='text-sm font-bold text-foreground uppercase tracking-wide mb-2 flex items-center gap-2'>
                 <span className='w-1 h-4 bg-primary rounded-full'></span>
                 Key Features
-              </h5>
+              </h4>
               <ul className='space-y-1'>
                 {project.highlights.map((highlight, index) => (
                   <li
@@ -198,10 +199,10 @@ function FlipCard({ project }: { project: Project }) {
 
             {/* TECHNOLOGIES */}
             <div className='py-3'>
-              <h5 className='text-sm font-bold text-foreground uppercase tracking-wide mb-2 flex items-center gap-2'>
+              <h4 className='text-sm font-bold text-foreground uppercase tracking-wide mb-2 flex items-center gap-2'>
                 <span className='w-1 h-4 bg-primary rounded-full'></span>
                 Technologies
-              </h5>
+              </h4>
               <div className='flex flex-wrap gap-1.5'>
                 {project.technologies.map((tech) => {
                   const Icon = tech.icon
@@ -341,7 +342,7 @@ export default function ProjectsNew() {
           <div className='absolute left-1/2 top-0 bottom-0 w-px bg-linear-to-b from-transparent via-primary/50 to-transparent hidden lg:block' />
 
           {/* Projects */}
-          <div className='space-y-32'>
+          <div className='space-y-16 sm:space-y-24 lg:space-y-32'>
             {projects.filter(p => p.status === 'completed').map((project, index) => {
               const isEven = index % 2 === 0
               return (
@@ -367,7 +368,7 @@ export default function ProjectsNew() {
                     {/* Image Section */}
                     <div className={`relative group ${isEven ? '' : 'lg:col-start-2'}`}>
                       <div className='absolute -inset-4 bg-linear-to-br from-primary/30 to-accent/30 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-all duration-700' />
-                      <div className='relative overflow-hidden rounded-3xl border-2 border-border/50 group-hover:border-primary/50 shadow-2xl transition-all duration-500 h-[400px]'>
+                      <div className='relative overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-border/50 group-hover:border-primary/50 shadow-2xl transition-all duration-500 h-[280px] sm:h-[350px] md:h-[400px]'>
                         <ImageGallery images={project.images} title={project.title} />
                         
                         {/* Floating Tags */}
@@ -405,20 +406,20 @@ export default function ProjectsNew() {
                         <div className='inline-block px-4 py-1.5 bg-primary/10 border border-primary/30 rounded-full text-primary text-sm font-bold mb-4'>
                           Project #{String(index + 1).padStart(2, '0')}
                         </div>
-                        <h3 className='text-4xl md:text-5xl font-bold text-foreground mb-4 leading-tight'>
+                        <h3 className='text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 leading-tight'>
                           {project.title}
                         </h3>
-                        <p className='text-lg text-muted-foreground leading-relaxed'>
+                        <p className='text-lg text-foreground/75 leading-relaxed'>
                           {project.description}
                         </p>
                       </div>
 
                       {/* Highlights Grid */}
-                      <div className='grid grid-cols-1 sm:grid-cols-2 gap-3 content-center  '>
+                      <div className='grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 content-center'>
                         {project.highlights.map((highlight, i) => (
                           <div
                             key={i}
-                            className='bg-card/60 backdrop-blur-sm border border-border/50 rounded-xl p-4 hover:border-primary/50 hover:bg-card/80 transition-all duration-300 flex flex-col gap-2 hover:scale-105 '
+                            className='bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-primary/50 hover:bg-card/80 transition-all duration-300 flex flex-col gap-2 hover:scale-105'
                           >
                             <div className='flex items-start gap-2'>
                               <span className='text-primary text-xl mt-0.5'>✦</span>
@@ -493,14 +494,14 @@ export default function ProjectsNew() {
       {/* All Projects Modal - Rendered as Portal-like fixed overlay */}
       {showAllProjects && (
         <div
-          className={`fixed inset-0 z-9999 flex items-center justify-center p-4 md:p-6 backdrop-blur-lg transition-all duration-300 ${
+          className={`fixed inset-0 z-9999 flex items-start sm:items-center justify-center p-0 sm:p-4 md:p-6 backdrop-blur-lg transition-all duration-300 ${
             isClosing ? 'bg-black/0 opacity-0' : 'bg-black/60 opacity-100'
           }`}
           onClick={handleCloseModal}
           style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
         >
           <div
-            className={`relative w-full max-w-[1400px] max-h-[90vh] bg-linear-to-br from-background via-background to-muted/20 rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 border border-primary/10 ${
+            className={`relative w-full sm:max-w-[95vw] lg:max-w-[1400px] h-full sm:h-auto sm:max-h-[90vh] bg-linear-to-br from-background via-background to-muted/20 sm:rounded-2xl shadow-2xl overflow-hidden transition-all duration-300 border-0 sm:border border-primary/10 ${
               isClosing 
                 ? 'opacity-0 scale-95 translate-y-8' 
                 : 'opacity-100 scale-100 translate-y-0'
@@ -509,30 +510,30 @@ export default function ProjectsNew() {
             onClick={(e) => e.stopPropagation()}
           >
               {/* Modal Header */}
-              <div className='sticky top-0 z-10 bg-linear-to-r from-background via-background to-muted/10 backdrop-blur-sm px-8 py-6 border-b border-primary/10'>
-                <div className='flex items-center justify-between'>
-                  <div>
-                    <h3 className='text-3xl font-bold text-foreground flex items-center gap-4'>
-                      <span className='w-1.5 h-8 bg-primary rounded-full'></span>
+              <div className='sticky top-0 z-10 bg-linear-to-r from-background via-background to-muted/10 backdrop-blur-sm px-4 sm:px-6 md:px-8 py-4 sm:py-5 md:py-6 border-b border-primary/10'>
+                <div className='flex items-center justify-between gap-3'>
+                  <div className='flex-1 min-w-0'>
+                    <h3 className='text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3 md:gap-4'>
+                      <span className='w-1 sm:w-1.5 h-6 sm:h-7 md:h-8 bg-primary rounded-full flex-shrink-0'></span>
                       All Projects
                     </h3>
-                    <p className='text-sm text-muted-foreground ml-6 mt-2'>
+                    <p className='text-xs sm:text-sm text-muted-foreground ml-4 sm:ml-5 md:ml-6 mt-1 sm:mt-2 truncate'>
                       {projects.length} projects showcasing diverse skills and expertise
                     </p>
                   </div>
                   <button
                     onClick={handleCloseModal}
-                    className='p-3 bg-primary/10 hover:bg-primary/20 border border-primary/30 hover:border-primary/50 rounded-full transition-all duration-200 hover:scale-110 hover:rotate-90 group'
+                    className='p-2 sm:p-2.5 md:p-3 bg-primary/10 hover:bg-primary/20 border border-primary/30 hover:border-primary/50 rounded-full transition-all duration-200 hover:scale-110 hover:rotate-90 group flex-shrink-0'
                     aria-label='Close modal'
                   >
-                    <X className='w-6 h-6 text-primary/70 group-hover:text-primary transition-colors' />
+                    <X className='w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary/70 group-hover:text-primary transition-colors' />
                   </button>
                 </div>
               </div>
 
               {/* Modal Content */}
-              <div className='overflow-y-auto max-h-[calc(90vh-120px)] px-8 py-8 bg-linear-to-b from-transparent via-background to-muted/10 scrollbar-hide'>
-                <div className='grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
+              <div className='overflow-y-auto h-[calc(100vh-100px)] sm:h-auto sm:max-h-[calc(90vh-120px)] px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8 bg-linear-to-b from-transparent via-background to-muted/10 scrollbar-hide'>
+                <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 md:gap-6'>
                   {projects.map((project) => (
                     <FlipCard key={project.id} project={project} />
                   ))}
