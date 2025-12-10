@@ -168,6 +168,61 @@
     color: var(--color-foreground);
   }
   
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  /* Custom text selection */
+  ::selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  
+  ::-moz-selection {
+    background-color: var(--color-primary);
+    color: var(--color-primary-foreground);
+  }
+  
+  /* Enhanced focus visible for accessibility */
+  *:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  
+  /* Custom Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 12px;
+    height: 12px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: var(--color-background);
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-primary);
+    border-radius: 10px;
+    border: 2px solid var(--color-background);
+    transition: background-color 0.2s ease;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: oklch(from var(--color-primary) calc(l - 0.1) c h);
+  }
+  
+  ::-webkit-scrollbar-thumb:active {
+    background: oklch(from var(--color-primary) calc(l - 0.15) c h);
+  }
+  
+  /* Firefox scrollbar styling */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-background);
+  }
+  
   /* Global smooth transitions for theme changes - applies when theme is switching */
   html[data-theme-transition="true"] * {
     transition-property: background-color, border-color, color, box-shadow, outline-color, fill, stroke !important;
@@ -444,3 +499,54 @@ body.modal-open [data-navbar] {
   visibility: hidden !important;
   z-index: 0 !important;
 }
+
+/* ===== Link Hover Effects ===== */
+
+/* Animated underline for links */
+a.link-underline {
+  position: relative;
+  text-decoration: none;
+  background-image: linear-gradient(
+    to right,
+    var(--color-primary),
+    var(--color-primary) 50%,
+    transparent 50%
+  );
+  background-size: 200% 2px;
+  background-repeat: no-repeat;
+  background-position: 100% 100%;
+  transition: background-position 0.3s ease;
+  padding-bottom: 2px;
+}
+
+a.link-underline:hover {
+  background-position: 0 100%;
+}
+
+/* Glowing text on hover */
+.text-glow-hover {
+  transition: text-shadow 0.3s ease;
+}
+
+.text-glow-hover:hover {
+  text-shadow: 0 0 20px var(--color-primary),
+               0 0 40px var(--color-primary),
+               0 0 60px var(--color-primary);
+}
+
+/* Smooth gradient border animation */
+@keyframes borderGlow {
+  0%, 100% {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 5px var(--color-primary);
+  }
+  50% {
+    border-color: var(--color-accent);
+    box-shadow: 0 0 15px var(--color-accent);
+  }
+}
+
+.border-animate-glow {
+  animation: borderGlow 3s ease-in-out infinite;
+}
+
