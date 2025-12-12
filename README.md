@@ -12,29 +12,34 @@ A modern, high-performance portfolio showcasing innovative projects and technica
 ## ✨ Features
 
 ### 🎭 **Theme System**
+
 - Dark/Light/System mode with localStorage persistence
 - Smooth theme transitions using CSS variables and OKLCH color space
 - Automatic theme detection based on system preferences
 
 ### 🎬 **Advanced Animations**
+
 - GSAP-powered scroll-triggered animations
 - Smooth entrance effects with stagger delays
 - Interactive hover states and micro-interactions
 - Sticky navbar with slide-down animation
 
 ### 📱 **Responsive Design**
+
 - Mobile-first approach with breakpoint optimization
 - Full-screen modal views on mobile devices
 - Touch-optimized interactions
 - Responsive typography and spacing
 
 ### ⚡ **Performance Optimized**
+
 - Lighthouse Score: 92+ Performance, 94+ Accessibility, 100 SEO
 - Image optimization with WebP format and lazy loading
 - Custom scrollbar styling with primary brand colors
 - Smooth scroll behavior and GPU-accelerated animations
 
 ### 🎨 **UI/UX Excellence**
+
 - Custom scrollbar matching brand identity
 - Text selection styling with primary colors
 - Enhanced focus indicators for accessibility
@@ -42,6 +47,7 @@ A modern, high-performance portfolio showcasing innovative projects and technica
 - Flying orb background effects
 
 ### 📊 **Project Showcase**
+
 - Interactive flip cards with 3D transformations
 - Image galleries with navigation arrows
 - Timeline-based project display
@@ -49,6 +55,7 @@ A modern, high-performance portfolio showcasing innovative projects and technica
 - Technology badges with brand colors
 
 ### 📧 **Contact Integration**
+
 - Serverless email API using Resend
 - Form validation and error handling
 - Social media links integration
@@ -67,25 +74,30 @@ Experience the live version with all features, animations, and interactions.
 ## 🛠️ Tech Stack
 
 ### **Frontend**
+
 - **React 19.2.3** - Latest React with concurrent features
 - **TypeScript 5.8.3** - Type-safe development
 - **Vite 7.2.7** - Lightning-fast build tool
 - **Tailwind CSS 4.1.18** - Utility-first styling with custom design system
 
 ### **Animation Libraries**
+
 - **GSAP 3.14.1** - Professional-grade animations
 - **ScrollTrigger** - Scroll-based animation triggers
 
 ### **Icons & UI**
+
 - **Lucide React** - Beautiful, consistent icon set
 - **React Icons 5.5** - Extensive icon library for tech badges
 
 ### **Backend/API**
+
 - **Vercel Serverless Functions** - API endpoints
 - **Resend 6.6.0** - Email delivery service
 - **@vercel/node 5.5.15** - Vercel runtime
 
 ### **Developer Tools**
+
 - **ESLint 9.39** - Code quality enforcement
 - **TypeScript ESLint** - TypeScript-specific linting
 - **Git** - Version control
@@ -210,13 +222,13 @@ Edit `src/index.css` to customize color palette:
 
 ```css
 :root {
-  --primary: oklch(0.88 0.18 94.01);  /* Yellow/Gold */
-  --background: oklch(0.95 0.01 255);  /* Light background */
+  --primary: oklch(0.88 0.18 94.01); /* Yellow/Gold */
+  --background: oklch(0.95 0.01 255); /* Light background */
   /* ... more colors */
 }
 
 .dark {
-  --background: oklch(0.15 0 0);  /* Dark background */
+  --background: oklch(0.15 0 0); /* Dark background */
   /* ... dark mode colors */
 }
 ```
@@ -298,7 +310,7 @@ Contributions, issues, and feature requests are welcome!
 - 📧 Email: [muhannadalsrahen@gmail.com](mailto:muhannadalsrahen@gmail.com)
 - 💼 LinkedIn: [muhannad-alsrahen](https://linkedin.com/in/muhannad-alsrahen)
 - 🐙 GitHub: [MuhannadAl-Srahen](https://github.com/MuhannadAl-Srahen)
-- 🐦 Twitter: [@_glock_x](https://twitter.com/_glock_x)
+- 🐦 Twitter: [@\_glock_x](https://twitter.com/_glock_x)
 
 ---
 
@@ -312,5 +324,3 @@ Contributions, issues, and feature requests are welcome!
 ---
 
 **Built with 💛 by Muhannad Al-Srahen** | © 2025
-
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
