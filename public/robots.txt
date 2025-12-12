@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://muhannadalsrahen.dev/sitemap.xml
+Sitemap: https://www.muhannadalsrahen.dev/sitemap.xml
 
 # Google Search Console crawlers
 User-agent: Googlebot
