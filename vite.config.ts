@@ -14,4 +14,17 @@ export default defineConfig({
   server: {
     port: 2000,
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom'],
+          'animation': ['gsap'],
+          'icons': ['lucide-react', 'react-icons'],
+        },
+      },
+    },
+    // Increase chunk size warning limit
+    chunkSizeWarningLimit: 600,
+  },
 })

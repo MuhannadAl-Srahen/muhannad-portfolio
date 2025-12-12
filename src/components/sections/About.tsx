@@ -84,9 +84,13 @@ export default function About() {
                 <div className='relative rounded-2xl overflow-hidden border border-border/50 shadow-xl group-hover:border-primary/30 transition-all duration-300 ease-out'>
                   <img
                     src={profileImage2}
+                    srcSet={`${profileImage2}?w=640 640w, ${profileImage2}?w=800 800w, ${profileImage2}?w=1024 1024w`}
+                    sizes="(max-width: 640px) 640px, (max-width: 1024px) 800px, 1024px"
                     alt='Muhannad Al-Srahen'
                     className='w-full h-[450px] lg:h-[550px] object-cover'
                     loading='lazy'
+                    width='640'
+                    height='800'
                   />
                   <div className='absolute inset-0 bg-linear-to-t from-black/80 via-black/20 to-transparent' />
                   

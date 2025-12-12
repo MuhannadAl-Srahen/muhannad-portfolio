@@ -1,9 +1,11 @@
-import { useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
 import { ThemeProvider } from '@/contexts/ThemeContext'
 import { Navbar, Footer } from '@/components/layout'
 import { GlobalBackground } from '@/components/common'
 import { Hero, About, Skills, Projects } from '@/components/sections'
-import Contact from '@/components/sections/Contact'
+
+// Lazy load Contact form (below the fold)
+const Contact = lazy(() => import('@/components/sections/Contact'))
 
 export default function App() {
   useEffect(() => {
@@ -26,7 +28,9 @@ export default function App() {
           <About />
           <Skills />
           <Projects />
-          <Contact />
+          <Suspense fallback={<div className='min-h-screen' />}>
+            <Contact />
+          </Suspense>
         </main>
         <Footer />
       </div>

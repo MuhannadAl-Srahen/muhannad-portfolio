@@ -153,17 +153,18 @@ export default function Hero() {
       className='min-h-screen flex items-center justify-center px-6 md:px-12 pt-24 md:pt-20 lg:pt-16 relative overflow-hidden'
     >
       {/* Flying Orbs Background Animation - Pure CSS */}
-      <div className='absolute inset-0 z-0'>
+      <div className='absolute inset-0 z-0 will-change-transform' style={{contain: 'layout style paint'}}>
         {/* Primary Flying Orbs */}
         {[...Array(5)].map((_, i) => (
           <div
             key={`orb-${i}`}
-            className='absolute w-4 h-4 bg-primary/40 rounded-full animate-float-orb'
+            className='absolute w-4 h-4 bg-primary/40 rounded-full animate-float-orb will-change-transform'
             style={{
               left: `${20 + i * 15}%`,
               top: `${20 + i * 12}%`,
               animationDelay: `${i * 2}s`,
               animationDuration: `${12 + i * 2}s`,
+              contain: 'layout style paint',
             }}
           />
         ))}
@@ -172,29 +173,30 @@ export default function Hero() {
         {[...Array(3)].map((_, i) => (
           <div
             key={`accent-${i}`}
-            className='absolute w-2 h-2 bg-accent/50 rounded-full animate-float-orb-reverse'
+            className='absolute w-2 h-2 bg-accent/50 rounded-full animate-float-orb-reverse will-change-transform'
             style={{
               right: `${25 + i * 15}%`,
               bottom: `${20 + i * 15}%`,
               animationDelay: `${i * 3}s`,
               animationDuration: `${15 + i * 3}s`,
+              contain: 'layout style paint',
             }}
           />
         ))}
 
         {/* Large Ambient Background Lights */}
-        <div className='absolute top-1/4 left-1/4 w-80 h-80 bg-primary/12 rounded-full blur-3xl animate-pulse-slow' />
+        <div className='absolute top-1/4 left-1/4 w-80 h-80 bg-primary/12 rounded-full blur-3xl animate-pulse-slow will-change-transform' style={{contain: 'layout style paint'}} />
         <div
-          className='absolute bottom-1/3 right-1/3 w-64 h-64 bg-accent/8 rounded-full blur-3xl animate-pulse-slow'
-          style={{ animationDelay: '5s' }}
+          className='absolute bottom-1/3 right-1/3 w-64 h-64 bg-accent/8 rounded-full blur-3xl animate-pulse-slow will-change-transform'
+          style={{ animationDelay: '5s', contain: 'layout style paint' }}
         />
         <div
-          className='absolute top-1/2 right-1/4 w-96 h-96 bg-primary/6 rounded-full blur-3xl animate-breathe'
-          style={{ animationDelay: '2s' }}
+          className='absolute top-1/2 right-1/4 w-96 h-96 bg-primary/6 rounded-full blur-3xl animate-breathe will-change-transform'
+          style={{ animationDelay: '2s', contain: 'layout style paint' }}
         />
         <div
-          className='absolute bottom-1/4 left-1/3 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-breathe'
-          style={{ animationDelay: '8s' }}
+          className='absolute bottom-1/4 left-1/3 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-breathe will-change-transform'
+          style={{ animationDelay: '8s', contain: 'layout style paint' }}
         />
 
         {/* GSAP-driven ambient bubbles */}
@@ -316,6 +318,8 @@ export default function Hero() {
               <div className='relative group overflow-hidden rounded-2xl border-2 border-primary/90'>
                 <img
                   src={headshotImage}
+                  srcSet={`${headshotImage}?w=400 400w, ${headshotImage}?w=600 600w, ${headshotImage}?w=800 800w`}
+                  sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
                   alt='Muhannad Al-Srahen - Frontend Developer'
                   className='w-full max-w-md object-cover aspect-[4/5] group-hover:scale-105 transition-transform duration-400 ease-out'
                   width='400'
