@@ -258,43 +258,27 @@
   scrollbar-width: none;  /* Firefox */
 }
 
-/* ===== Custom Animations ===== */
+/* ===== Custom Animations (GPU-optimized) ===== */
 
-/* Flying orb animation - moves in elliptical path */
+/* Flying orb animation - simplified for better performance */
 @keyframes float-orb {
   0%, 100% {
-    transform: translate(0, 0) scale(0.8);
-    opacity: 0.2;
-  }
-  25% {
-    transform: translate(100px, -60px) scale(1);
-    opacity: 0.6;
+    transform: translate3d(0, 0, 0) scale(0.8);
+    opacity: 0.3;
   }
   50% {
-    transform: translate(150px, 0) scale(1.2);
-    opacity: 0.4;
-  }
-  75% {
-    transform: translate(80px, 50px) scale(1);
-    opacity: 0.6;
+    transform: translate3d(80px, -40px, 0) scale(1.1);
+    opacity: 0.5;
   }
 }
 
 @keyframes float-orb-reverse {
   0%, 100% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.3;
-  }
-  25% {
-    transform: translate(-60px, 80px) scale(0.8);
-    opacity: 0.7;
-  }
-  50% {
-    transform: translate(-80px, 120px) scale(1.1);
+    transform: translate3d(0, 0, 0) scale(1);
     opacity: 0.4;
   }
-  75% {
-    transform: translate(-40px, 60px) scale(0.9);
+  50% {
+    transform: translate3d(-50px, 60px, 0) scale(0.9);
     opacity: 0.6;
   }
 }
@@ -302,36 +286,36 @@
 /* Floating particles around image */
 @keyframes float-particle {
   0%, 100% {
-    transform: translateY(0) scale(0.8);
+    transform: translate3d(0, 0, 0) scale(0.8);
     opacity: 0.4;
   }
   50% {
-    transform: translateY(-25px) scale(1.2);
+    transform: translate3d(0, -25px, 0) scale(1.2);
     opacity: 1;
   }
 }
 
-/* Slow pulse for large background orbs */
+/* Slow pulse for large background orbs - simplified */
 @keyframes pulse-slow {
   0%, 100% {
-    transform: scale(1);
+    transform: scale3d(1, 1, 1);
     opacity: 0.3;
   }
   50% {
-    transform: scale(1.15);
-    opacity: 0.5;
+    transform: scale3d(1.1, 1.1, 1);
+    opacity: 0.45;
   }
 }
 
 /* Breathing animation for ambient lights */
 @keyframes breathe {
   0%, 100% {
-    transform: scale(0.9);
-    opacity: 0.2;
+    transform: scale3d(0.95, 0.95, 1);
+    opacity: 0.25;
   }
   50% {
-    transform: scale(1.1);
-    opacity: 0.4;
+    transform: scale3d(1.05, 1.05, 1);
+    opacity: 0.35;
   }
 }
 
