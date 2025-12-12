@@ -15,18 +15,18 @@ export default function Navbar() {
   const manualActiveRef = useRef<string | null>(null)
   const lastScrollY = useRef(0)
   const navbarRef = useRef<HTMLDivElement>(null)
+  const wasScrolledRef = useRef(false)
 
   // Scroll detection with mobile hide/show
   useEffect(() => {
     const onScroll = () => {
       const currentScrollY = window.scrollY
-      const wasScrolled = isScrolled
       const nowScrolled = currentScrollY > 60
       
       setIsScrolled(nowScrolled)
       
       // Animate navbar when it becomes sticky
-      if (!wasScrolled && nowScrolled && navbarRef.current) {
+      if (!wasScrolledRef.current && nowScrolled && navbarRef.current) {
         gsap.fromTo(
           navbarRef.current,
           { 
@@ -43,6 +43,7 @@ export default function Navbar() {
           }
         )
       }
+      wasScrolledRef.current = nowScrolled
 
       // Mobile navbar hide/show logic (only on mobile < 1024px)
       if (window.innerWidth < 1024) {
@@ -167,7 +168,7 @@ export default function Navbar() {
             </button>
 
             {/* Desktop Nav */}
-            <nav className='hidden lg:flex items-center gap-1'>
+            <nav className='hidden lg:flex items-center gap-3'>
               {navItems.map((item) => {
                 const Icon = item.icon
                 const isActive = activeSection === item.href.slice(1)
@@ -176,15 +177,15 @@ export default function Navbar() {
                     key={item.name}
                     onClick={() => handleNavClick(item.href)}
                     className={cn(
-                      'group flex items-center gap-2 px-3.5 py-2 rounded-full text-sm font-medium cursor-pointer',
-                      'transition-all duration-200 ease-out',
+                      'group flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium cursor-pointer',
+                      'transition-all duration-200',
                       isActive
-                        ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-muted/40'
+                        ? 'bg-primary/15 text-primary backdrop-blur-sm'
+                        : 'text-muted-foreground hover:bg-white/5 hover:text-foreground dark:hover:bg-white/10'
                     )}
                     aria-current={isActive ? 'page' : undefined}
                   >
-                    <Icon size={16} className={cn('transition-colors duration-150', isActive && 'text-primary')} />
+                    <Icon size={16} className={isActive ? 'text-primary' : ''} />
                     <span>{item.name}</span>
                   </button>
                 )
@@ -196,7 +197,7 @@ export default function Navbar() {
               {/* Theme Toggle */}
               <button
                 onClick={toggleTheme}
-                className='p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors duration-200 ease-out cursor-pointer'
+                className='group p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer'
                 aria-label='Toggle theme'
               >
                 {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
@@ -205,7 +206,7 @@ export default function Navbar() {
               {/* Mobile Menu Button */}
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
-                className='lg:hidden p-2.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/40 transition-colors duration-200 ease-out cursor-pointer'
+                className='lg:hidden p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer'
                 aria-label='Open menu'
               >
                 <Menu size={22} />
@@ -261,14 +262,14 @@ export default function Navbar() {
                   onClick={() => handleNavClick(item.href)}
                   className={cn(
                     'group w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left cursor-pointer',
-                    'transition-all duration-200 ease-out',
+                    'transition-all duration-200',
                     isActive
-                      ? 'bg-primary/20 text-primary ring-1 ring-primary/30 shadow-[0_8px_24px_-12px_rgba(0,0,0,0.35)]'
-                      : 'text-muted-foreground hover:text-foreground hover:bg-muted/50'
+                      ? 'bg-primary/15 text-primary'
+                      : 'text-muted-foreground hover:bg-white/5 dark:hover:bg-white/10 hover:text-foreground'
                   )}
                   aria-current={isActive ? 'page' : undefined}
                 >
-                  <Icon size={20} />
+                  <Icon size={20} className={isActive ? 'text-primary' : ''} />
                   <span className='font-medium text-base'>{item.name}</span>
                 </button>
               )
@@ -285,7 +286,7 @@ export default function Navbar() {
             </span>
             <button
               onClick={toggleTheme}
-              className='flex items-center gap-2 px-3 py-1.5 rounded-lg bg-muted/50 hover:bg-muted transition-colors duration-300 ease-out cursor-pointer text-sm'
+              className='flex items-center gap-2 px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer text-sm'
             >
               {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
               <span className='font-medium'>
@@ -304,7 +305,7 @@ export default function Navbar() {
                   href={link.href}
                   target='_blank'
                   rel='noopener noreferrer'
-                  className='p-2.5 rounded-lg bg-muted/50 text-muted-foreground hover:text-primary hover:bg-primary/15 transition-all duration-300 ease-out cursor-pointer'
+                  className='p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer'
                   aria-label={link.name}
                 >
                   <Icon size={20} />
