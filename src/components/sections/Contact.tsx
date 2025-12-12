@@ -187,7 +187,10 @@ export default function Contact() {
         setIsSubmitted(false)
       }, 3000)
     } catch (error) {
-      console.error('Error sending message:', error)
+      // Log error in development only
+      if (import.meta.env.DEV) {
+        console.error('Error sending message:', error)
+      }
       alert('Failed to send message. Please try again or email me directly.')
     } finally {
       setIsSubmitting(false)

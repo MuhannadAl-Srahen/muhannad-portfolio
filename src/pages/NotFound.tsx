@@ -90,7 +90,7 @@ export default function NotFound() {
         {/* Large 404 Number with gradient */}
         <div ref={numberRef} className='mb-12 text-center'>
           <h1 className='text-[180px] md:text-[240px] font-black leading-none select-none'>
-            <span className='bg-gradient-to-r from-primary via-primary/70 to-primary/40 bg-clip-text text-transparent'>
+            <span className='bg-linear-to-r from-primary via-primary/70 to-primary/40 bg-clip-text text-transparent'>
               404
             </span>
           </h1>
