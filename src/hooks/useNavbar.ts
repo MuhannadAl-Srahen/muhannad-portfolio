@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 
 export interface NavItem {
   name: string
@@ -19,75 +19,133 @@ export function useNavbar(navItems: NavItem[]) {
   const [isNavVisible, setIsNavVisible] = useState(true)
   const [lastScrollY, setLastScrollY] = useState(0)
 
+  // Handle scroll with throttling for better performance
   useEffect(() => {
+    let timeoutId: NodeJS.Timeout
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        const currentScrollY = window.scrollY
 
-      // Desktop scroll behavior (existing)
-      if (!isMobileMenuOpen && window.innerWidth >= 768) {
-        setIsScrolled(currentScrollY > 50)
-      }
-
-      // Mobile navbar hide/show behavior
-      if (window.innerWidth < 768 && !isMobileMenuOpen) {
-        if (currentScrollY < 10) {
-          // At the top, always show
-          setIsNavVisible(true)
-        } else if (currentScrollY > lastScrollY && currentScrollY > 100) {
-          // Scrolling down, hide navbar
-          setIsNavVisible(false)
-        } else if (currentScrollY < lastScrollY) {
-          // Scrolling up, show navbar
-          setIsNavVisible(true)
+        // Desktop scroll behavior - show scrolled state
+        if (!isMobileMenuOpen && window.innerWidth >= 1024) {
+          setIsScrolled(currentScrollY > 100)
+          setIsNavVisible(true) // Always visible on desktop
         }
-      }
 
-      setLastScrollY(currentScrollY)
+        // Mobile & Tablet navbar hide/show behavior
+        if (window.innerWidth < 1024 && !isMobileMenuOpen) {
+          setIsScrolled(currentScrollY > 100)
+          
+          if (currentScrollY < 10) {
+            // At the top, always show
+            setIsNavVisible(true)
+          } else if (currentScrollY > lastScrollY && currentScrollY > 150) {
+            // Scrolling down, hide navbar
+            setIsNavVisible(false)
+          } else if (currentScrollY < lastScrollY) {
+            // Scrolling up, show navbar
+            setIsNavVisible(true)
+          }
+        }
+
+        setLastScrollY(currentScrollY)
+      }, 10) // 10ms throttle for smooth performance
     }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      clearTimeout(timeoutId)
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [isMobileMenuOpen, lastScrollY])
+
+  // Handle active section detection
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout
 
     const handleActiveSection = () => {
-      const sections = navItems.map((item) => item.href.substring(1))
-      const currentSection = sections.find((section) => {
-        const element = document.getElementById(section)
-        if (element) {
-          const rect = element.getBoundingClientRect()
-          return rect.top <= 100 && rect.bottom >= 100
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(() => {
+        const sections = navItems.map((item) => item.href.substring(1))
+        const scrollPosition = window.scrollY + 150 // Offset for better detection
+
+        // Find the current section
+        for (let i = sections.length - 1; i >= 0; i--) {
+          const section = sections[i]
+          const element = document.getElementById(section)
+          
+          if (element) {
+            const rect = element.getBoundingClientRect()
+            const elementTop = rect.top + window.scrollY
+            
+            if (scrollPosition >= elementTop - 100) {
+              setActiveSection(section)
+              break
+            }
+          }
         }
-        return false
-      })
-      if (currentSection) {
-        setActiveSection(currentSection)
-      }
+
+        // Special case: if at the very top, set to 'home'
+        if (window.scrollY < 100) {
+          setActiveSection('home')
+        }
+      }, 50) // 50ms throttle
     }
 
+    window.addEventListener('scroll', handleActiveSection, { passive: true })
+    return () => {
+      clearTimeout(timeoutId)
+      window.removeEventListener('scroll', handleActiveSection)
+    }
+  }, [navItems])
+
+  // Handle window resize
+  useEffect(() => {
     const handleResize = () => {
       // Close mobile menu on desktop resize
-      if (window.innerWidth >= 768) {
+      if (window.innerWidth >= 1024) {
         setIsMobileMenuOpen(false)
         setIsNavVisible(true) // Always show on desktop
       }
     }
 
-    window.addEventListener('scroll', handleScroll)
-    window.addEventListener('scroll', handleActiveSection)
     window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
 
     return () => {
-      window.removeEventListener('scroll', handleScroll)
-      window.removeEventListener('scroll', handleActiveSection)
-      window.removeEventListener('resize', handleResize)
+      document.body.style.overflow = ''
     }
-  }, [isMobileMenuOpen, navItems, lastScrollY])
+  }, [isMobileMenuOpen])
 
-  const handleNavClick = (href: string) => {
+  const handleNavClick = useCallback((href: string) => {
     const element = document.querySelector(href)
-    element?.scrollIntoView({ behavior: 'smooth' })
-    setIsMobileMenuOpen(false)
-  }
+    if (element) {
+      const offset = 100 // Navbar height offset
+      const elementPosition = element.getBoundingClientRect().top + window.scrollY
+      const offsetPosition = elementPosition - offset
 
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen)
-  }
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: 'smooth',
+      })
+    }
+    setIsMobileMenuOpen(false)
+  }, [])
+
+  const toggleMobileMenu = useCallback(() => {
+    setIsMobileMenuOpen((prev) => !prev)
+  }, [])
 
   return {
     isScrolled,
