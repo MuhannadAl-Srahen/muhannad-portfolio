@@ -17,74 +17,63 @@ export default function Navbar() {
   const navbarRef = useRef<HTMLDivElement>(null)
   const wasScrolledRef = useRef(false)
 
-  // Scroll detection with mobile hide/show - throttled for performance
+  // Scroll detection with mobile hide/show - optimized for smoothness
   useEffect(() => {
-    let ticking = false
-    
     const onScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const currentScrollY = window.scrollY
-          const nowScrolled = currentScrollY > 60
-          
-          setIsScrolled(nowScrolled)
-          
-          // Animate navbar when it becomes sticky
-          if (!wasScrolledRef.current && nowScrolled && navbarRef.current) {
-            gsap.fromTo(
-              navbarRef.current,
-              { 
-                y: -20, 
-                opacity: 0,
-                scale: 0.95
-              },
-              { 
-                y: 0, 
-                opacity: 1,
-                scale: 1,
-                duration: 0.4,
-                ease: 'power2.out'
-              }
-            )
-          }
-          wasScrolledRef.current = nowScrolled
+      const currentScrollY = window.scrollY
+      const nowScrolled = currentScrollY > 60
+      
+      // Only update state if value actually changed
+      if (wasScrolledRef.current !== nowScrolled) {
+        setIsScrolled(nowScrolled)
+        
+        // Animate navbar when it becomes sticky
+        if (!wasScrolledRef.current && nowScrolled && navbarRef.current) {
+          gsap.fromTo(
+            navbarRef.current,
+            { y: -20, opacity: 0, scale: 0.95 },
+            { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
+          )
+        }
+        wasScrolledRef.current = nowScrolled
+      }
 
-          // Mobile navbar hide/show logic (only on mobile < 1024px)
-          if (window.innerWidth < 1024) {
-            if (currentScrollY > lastScrollY.current && currentScrollY > 100) {
-              setHideOnMobile(true)
-            } else if (currentScrollY < lastScrollY.current) {
-              setHideOnMobile(false)
-            }
-          } else {
-            setHideOnMobile(false)
-          }
-          
-          lastScrollY.current = currentScrollY
+      // Mobile navbar hide/show logic (only on mobile < 1024px)
+      if (window.innerWidth < 1024) {
+        const scrollingDown = currentScrollY > lastScrollY.current && currentScrollY > 100
+        const scrollingUp = currentScrollY < lastScrollY.current
+        
+        if (scrollingDown && !hideOnMobile) {
+          setHideOnMobile(true)
+        } else if (scrollingUp && hideOnMobile) {
+          setHideOnMobile(false)
+        }
+      } else if (hideOnMobile) {
+        setHideOnMobile(false)
+      }
+      
+      lastScrollY.current = currentScrollY
 
-          // Detect active section (skip while a manual click is in progress)
-          if (!manualActiveRef.current) {
-            for (let i = navItems.length - 1; i >= 0; i--) {
-              const section = document.getElementById(navItems[i].href.slice(1))
-              if (section) {
-                const rect = section.getBoundingClientRect()
-                if (rect.top <= 120) {
-                  setActiveSection(navItems[i].href.slice(1))
-                  break
-                }
+      // Detect active section (skip while a manual click is in progress)
+      if (!manualActiveRef.current) {
+        for (let i = navItems.length - 1; i >= 0; i--) {
+          const section = document.getElementById(navItems[i].href.slice(1))
+          if (section) {
+            const rect = section.getBoundingClientRect()
+            if (rect.top <= 120) {
+              if (activeSection !== navItems[i].href.slice(1)) {
+                setActiveSection(navItems[i].href.slice(1))
               }
+              break
             }
           }
-          
-          ticking = false
-        })
-        ticking = true
+        }
       }
     }
 
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  }, [activeSection, hideOnMobile])
 
   // Lock body scroll
   useEffect(() => {

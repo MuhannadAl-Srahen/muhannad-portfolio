@@ -1,6 +1,18 @@
 
 @import 'tailwindcss';
 
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Disable smooth scroll when user prefers reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 :root {
   --background: oklch(0.95 0.01 255);
   --foreground: oklch(0.25 0.03 264.67);
