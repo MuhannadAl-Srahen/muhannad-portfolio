@@ -34,9 +34,12 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
     <div className='relative h-full w-full group/gallery'>
       <img
         src={images[currentIndex]}
+        srcSet={`${images[currentIndex]}?w=600 600w, ${images[currentIndex]}?w=900 900w, ${images[currentIndex]}?w=1200 1200w`}
+        sizes='(max-width: 768px) 600px, (max-width: 1024px) 900px, 1200px'
         alt={`${title} - Image ${currentIndex + 1}`}
         className='w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110'
         style={{ minHeight: '100%' }}
+        loading='lazy'
       />
       
       {/* Dark overlay - only on hover */}
@@ -514,7 +517,7 @@ export default function ProjectsNew() {
                 <div className='flex items-center justify-between gap-3'>
                   <div className='flex-1 min-w-0'>
                     <h3 className='text-xl sm:text-2xl md:text-3xl font-bold text-foreground flex items-center gap-2 sm:gap-3 md:gap-4'>
-                      <span className='w-1 sm:w-1.5 h-6 sm:h-7 md:h-8 bg-primary rounded-full flex-shrink-0'></span>
+                      <span className='w-1 sm:w-1.5 h-6 sm:h-7 md:h-8 bg-primary rounded-full shrink-0'></span>
                       All Projects
                     </h3>
                     <p className='text-xs sm:text-sm text-muted-foreground ml-4 sm:ml-5 md:ml-6 mt-1 sm:mt-2 truncate'>
@@ -523,7 +526,7 @@ export default function ProjectsNew() {
                   </div>
                   <button
                     onClick={handleCloseModal}
-                    className='p-2 sm:p-2.5 md:p-3 bg-primary/10 hover:bg-primary/20 border border-primary/30 hover:border-primary/50 rounded-full transition-all duration-200 hover:scale-110 hover:rotate-90 group flex-shrink-0'
+                    className='p-2 sm:p-2.5 md:p-3 bg-primary/10 hover:bg-primary/20 border border-primary/30 hover:border-primary/50 rounded-full transition-all duration-200 hover:scale-110 hover:rotate-90 group shrink-0'
                     aria-label='Close modal'
                   >
                     <X className='w-5 h-5 sm:w-5 sm:h-5 md:w-6 md:h-6 text-primary/70 group-hover:text-primary transition-colors' />
