@@ -249,17 +249,27 @@ html {
   }
   
   /* Global smooth transitions for theme changes - applies when theme is switching */
-  html[data-theme-transition="true"] * {
-    transition-property: background-color, border-color, color !important;
-    transition-duration: 150ms !important;
-    transition-timing-function: ease-in-out !important;
+  /* Only transition body and major containers for better performance */
+  html[data-theme-transition="true"] body,
+  html[data-theme-transition="true"] main,
+  html[data-theme-transition="true"] section,
+  html[data-theme-transition="true"] div[class*="bg-"],
+  html[data-theme-transition="true"] div[class*="card"],
+  html[data-theme-transition="true"] button,
+  html[data-theme-transition="true"] a {
+    transition: background-color 120ms ease-out, color 120ms ease-out, border-color 120ms ease-out !important;
   }
   
-  /* Mobile: Faster and simpler theme transition */
+  /* Mobile: Instant theme switch with minimal transition */
   @media (max-width: 768px) {
-    html[data-theme-transition="true"] * {
-      transition-property: background-color, color !important;
-      transition-duration: 100ms !important;
+    html[data-theme-transition="true"] body,
+    html[data-theme-transition="true"] main,
+    html[data-theme-transition="true"] section,
+    html[data-theme-transition="true"] div[class*="bg-"],
+    html[data-theme-transition="true"] div[class*="card"],
+    html[data-theme-transition="true"] button,
+    html[data-theme-transition="true"] a {
+      transition: background-color 50ms linear, color 50ms linear !important;
     }
   }
   
@@ -282,6 +292,23 @@ html {
   html[data-theme-transition="true"] [class*="animate-"],
   html[data-theme-transition="true"] [style*="animation"] {
     animation-play-state: paused !important;
+  }
+
+  /* Navbar optimizations */
+  html[data-theme-transition="true"] header {
+    transition: background-color 80ms linear, border-color 80ms linear !important;
+  }
+  
+  @media (max-width: 768px) {
+    html[data-theme-transition="true"] header {
+      transition: background-color 40ms linear !important;
+    }
+  }
+
+  /* Completely disable all backdrop filters during theme switch */
+  html[data-theme-transition="true"] * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
 }
 
