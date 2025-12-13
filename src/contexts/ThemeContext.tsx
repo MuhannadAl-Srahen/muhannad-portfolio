@@ -53,9 +53,13 @@ export function ThemeProvider({
     }
 
     // Remove transition flag after animation completes
+    // Mobile: 100ms, Desktop: 150ms
+    const isMobile = window.innerWidth <= 768
+    const duration = isMobile ? 100 : 150
+    
     const timer = setTimeout(() => {
       root.removeAttribute('data-theme-transition')
-    }, 200)
+    }, duration)
 
     return () => clearTimeout(timer)
   }, [theme])
