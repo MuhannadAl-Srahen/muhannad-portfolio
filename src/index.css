@@ -250,14 +250,23 @@ html {
   
   /* Global smooth transitions for theme changes - applies when theme is switching */
   html[data-theme-transition="true"] * {
-    transition-property: background-color, border-color, color, box-shadow, outline-color, fill, stroke !important;
-    transition-duration: 200ms !important;
+    transition-property: background-color, border-color, color !important;
+    transition-duration: 150ms !important;
     transition-timing-function: ease-in-out !important;
+  }
+  
+  /* Mobile: Faster and simpler theme transition */
+  @media (max-width: 768px) {
+    html[data-theme-transition="true"] * {
+      transition-property: background-color, color !important;
+      transition-duration: 100ms !important;
+    }
   }
   
   /* Optimize repainting during theme switch */
   html[data-theme-transition="true"] {
     will-change: background-color;
+    transform: translateZ(0); /* Force GPU acceleration */
   }
   
   /* Preserve Tailwind hover/interactive transitions */
