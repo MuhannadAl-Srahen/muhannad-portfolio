@@ -53,9 +53,9 @@ export function ThemeProvider({
     }
 
     // Remove transition flag after animation completes
-    // Mobile: 100ms, Desktop: 150ms
+    // Mobile: 50ms (ultra-fast), Desktop: 120ms
     const isMobile = window.innerWidth <= 768
-    const duration = isMobile ? 100 : 150
+    const duration = isMobile ? 50 : 120
     
     const timer = setTimeout(() => {
       root.removeAttribute('data-theme-transition')
