@@ -11,13 +11,12 @@ export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
-  const ambientOrbRefs = useRef<HTMLDivElement[]>([])
-  const beamRefs = useRef<HTMLDivElement[]>([])
 
-  // Hero entrance animations - run once on mount
+  // Hero entrance animations
   useEffect(() => {
+
     const ctx = gsap.context(() => {
-      // Content slide in from left - set initial state immediately
+      // Content slide in from left
       gsap.set(contentRef.current, { x: -50, opacity: 0 })
       gsap.to(contentRef.current, {
         x: 0,
@@ -26,7 +25,7 @@ export default function Hero() {
         ease: 'power2.out',
       })
 
-      // Image slide in from right - set initial state immediately
+      // Image slide in from right
       gsap.set(imageRef.current, { x: 50, opacity: 0 })
       gsap.to(imageRef.current, {
         x: 0,
@@ -35,14 +34,13 @@ export default function Hero() {
         ease: 'power2.out',
       })
 
-      // Main heading - fade in with blur
+      // Main heading - fade in
       const mainHeading = document.querySelector('.hero-main-heading')
       if (mainHeading) {
-        gsap.set(mainHeading, { y: 30, opacity: 0, filter: 'blur(10px)' })
+        gsap.set(mainHeading, { y: 30, opacity: 0 })
         gsap.to(mainHeading, {
           y: 0,
           opacity: 1,
-          filter: 'blur(0px)',
           duration: 1,
           delay: 0.2,
           ease: 'power3.out',
@@ -62,11 +60,10 @@ export default function Hero() {
         })
       }
 
-      // Supporting text - fade in with slight scale
+      // Supporting text - fade in
       const supportingText = document.querySelectorAll('.hero-supporting-text')
-      gsap.set(supportingText, { scale: 0.95, opacity: 0 })
+      gsap.set(supportingText, { opacity: 0 })
       gsap.to(supportingText, {
-        scale: 1,
         opacity: 1,
         duration: 0.8,
         stagger: 0.2,
@@ -77,69 +74,24 @@ export default function Hero() {
       // CTA Buttons - pop in
       const ctaButtons = document.querySelector('.hero-cta-buttons')
       if (ctaButtons) {
-        gsap.set(ctaButtons, { y: 20, opacity: 0, scale: 0.95 })
+        gsap.set(ctaButtons, { y: 20, opacity: 0 })
         gsap.to(ctaButtons, {
           y: 0,
           opacity: 1,
-          scale: 1,
           duration: 0.6,
           delay: 1.3,
-          ease: 'back.out(1.4)',
+          ease: 'power2.out',
         })
       }
 
-      // Image container - simple fade and slide
-      gsap.set(imageRef.current, { x: 50, opacity: 0 })
-      gsap.to(imageRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 1,
-        ease: 'power2.out',
-      })
-
-      // Image itself - gentle scale
+      // Image itself - gentle fade
       const heroImage = document.querySelector('.hero-image')
-      gsap.set(heroImage, { scale: 0.95, opacity: 0 })
+      gsap.set(heroImage, { opacity: 0 })
       gsap.to(heroImage, {
-        scale: 1,
         opacity: 1,
         duration: 1,
         delay: 0.2,
         ease: 'power2.out',
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
-
-  // Hero ambient animations - continuous background effects
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Ambient background motion (always runs)
-      gsap.to(ambientOrbRefs.current, {
-        y: 16,
-        duration: 5,
-        yoyo: true,
-        repeat: -1,
-        ease: 'sine.inOut',
-        stagger: { each: 0.2, from: 'random' },
-      })
-
-      gsap.to(beamRefs.current, {
-        opacity: 0.28,
-        duration: 2.6,
-        yoyo: true,
-        repeat: -1,
-        ease: 'sine.inOut',
-        stagger: { each: 0.25, from: 'center' },
-      })
-
-      gsap.to('.hero-ring', {
-        rotate: 360,
-        duration: 18,
-        repeat: -1,
-        ease: 'none',
-        transformOrigin: '50% 50%',
       })
     }, sectionRef)
 
@@ -152,84 +104,46 @@ export default function Hero() {
       id='home'
       className='min-h-screen flex items-center justify-center px-6 md:px-12 pt-24 md:pt-20 lg:pt-16 relative overflow-hidden'
     >
-      {/* Flying Orbs Background Animation - Pure CSS */}
-      <div className='absolute inset-0 z-0 will-change-transform' style={{contain: 'layout style paint'}}>
-        {/* Primary Flying Orbs */}
-        {[...Array(5)].map((_, i) => (
-          <div
-            key={`orb-${i}`}
-            className='absolute w-4 h-4 bg-primary/40 rounded-full animate-float-orb will-change-transform'
-            style={{
-              left: `${20 + i * 15}%`,
-              top: `${20 + i * 12}%`,
-              animationDelay: `${i * 2}s`,
-              animationDuration: `${12 + i * 2}s`,
-              contain: 'layout style paint',
-            }}
+      {/* Animated floating particles background */}
+      <div className='absolute inset-0 z-0 pointer-events-none overflow-hidden'>
+          {/* Large slow-moving gradient orbs */}
+          {/* Large floating orbs - on left side only */}
+          <div 
+            className='absolute w-[400px] h-[400px] bg-primary/10 rounded-full animate-hero-float-1'
+            style={{ filter: 'blur(80px)', top: '10%', left: '5%' }}
           />
-        ))}
-
-        {/* Accent Orbs */}
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={`accent-${i}`}
-            className='absolute w-2 h-2 bg-accent/50 rounded-full animate-float-orb-reverse will-change-transform'
-            style={{
-              right: `${25 + i * 15}%`,
-              bottom: `${20 + i * 15}%`,
-              animationDelay: `${i * 3}s`,
-              animationDuration: `${15 + i * 3}s`,
-              contain: 'layout style paint',
-            }}
+          <div 
+            className='absolute w-[320px] h-[320px] bg-accent/8 rounded-full animate-hero-float-2'
+            style={{ filter: 'blur(70px)', bottom: '20%', left: '8%' }}
           />
-        ))}
-
-        {/* Large Ambient Background Lights */}
-        <div className='absolute top-1/4 left-1/4 w-80 h-80 bg-primary/12 rounded-full blur-3xl animate-pulse-slow will-change-transform' style={{contain: 'layout style paint'}} />
-        <div
-          className='absolute bottom-1/3 right-1/3 w-64 h-64 bg-accent/8 rounded-full blur-3xl animate-pulse-slow will-change-transform'
-          style={{ animationDelay: '5s', contain: 'layout style paint' }}
-        />
-        <div
-          className='absolute top-1/2 right-1/4 w-96 h-96 bg-primary/6 rounded-full blur-3xl animate-breathe will-change-transform'
-          style={{ animationDelay: '2s', contain: 'layout style paint' }}
-        />
-        <div
-          className='absolute bottom-1/4 left-1/3 w-72 h-72 bg-accent/5 rounded-full blur-3xl animate-breathe will-change-transform'
-          style={{ animationDelay: '8s', contain: 'layout style paint' }}
-        />
-
-        {/* GSAP-driven ambient bubbles */}
-        {[...Array(6)].map((_, i) => (
-          <div
-            key={`ambient-${i}`}
-            ref={(el) => {
-              if (el) ambientOrbRefs.current[i] = el
-            }}
-            className='absolute w-6 h-6 rounded-full bg-primary/18 blur-[2px]'
-            style={{
-              left: `${8 + i * 14}%`,
-              top: `${10 + i * 9}%`,
-              filter: 'drop-shadow(0 10px 24px rgba(0,0,0,0.12))',
-            }}
-          />
-        ))}
-
-        {/* Soft beams */}
-        {[...Array(3)].map((_, i) => (
-          <div
-            key={`beam-${i}`}
-            ref={(el) => {
-              if (el) beamRefs.current[i] = el
-            }}
-            className='absolute h-[140%] w-40 -skew-x-6 bg-linear-to-b from-primary/6 via-primary/2 to-transparent blur-3xl'
-            style={{
-              left: `${20 + i * 18}%`,
-              top: '-20%',
-              opacity: 0.16,
-            }}
-          />
-        ))}
+          
+          {/* Small floating particles - scattered across left and center */}
+          {[...Array(8)].map((_, i) => {
+            // Create scattered positions spreading to center
+            const positions = [
+              { left: 8, top: 20 },
+              { left: 25, top: 35 },
+              { left: 5, top: 55 },
+              { left: 40, top: 42 },
+              { left: 15, top: 72 },
+              { left: 32, top: 58 },
+              { left: 10, top: 15 },
+              { left: 45, top: 80 },
+            ]
+            const pos = positions[i] || { left: 10, top: 50 }
+            return (
+              <div
+                key={i}
+                className={`absolute rounded-full bg-primary/30 animate-hero-particle-${(i % 4) + 1}`}
+                style={{
+                  width: `${8 + (i % 3) * 4}px`,
+                  height: `${8 + (i % 3) * 4}px`,
+                  left: `${pos.left}%`,
+                  top: `${pos.top}%`,
+                }}
+              />
+            )
+          })}
       </div>
 
       <div className='container mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10'>
@@ -308,12 +222,25 @@ export default function Hero() {
               transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             }}
           >
-            {/* Floating Accents */}
-            <div className='absolute -top-8 -left-8 w-16 h-16 border-2 border-primary/30 rounded-lg animate-spin-slow' />
-            <div className='absolute -bottom-8 -right-8 w-12 h-12 bg-accent/20 rounded-full animate-spin-slow-reverse' />
+            {/* Floating orbs around image */}
+            <>
+                {/* Corner accents */}
+                <div className='absolute -top-6 -left-6 w-12 h-12 border-2 border-primary/40 rounded-lg animate-spin-slow' />
+                <div className='absolute -bottom-6 -right-6 w-10 h-10 bg-accent/25 rounded-full animate-spin-slow-reverse' />
+                
+                {/* Floating orbs on the right side */}
+                <div className='absolute -right-16 top-1/4 w-4 h-4 bg-primary/50 rounded-full animate-image-orb' />
+                <div className='absolute -right-12 top-1/2 w-3 h-3 bg-accent/60 rounded-full animate-image-orb' style={{ animationDelay: '0.5s' }} />
+                <div className='absolute -right-20 top-2/3 w-5 h-5 bg-primary/40 rounded-full animate-image-orb' style={{ animationDelay: '1s' }} />
+                <div className='absolute -right-14 bottom-1/4 w-3 h-3 bg-primary/60 rounded-full animate-image-orb' style={{ animationDelay: '1.5s' }} />
+                
+                {/* A couple on the left too */}
+                <div className='absolute -left-12 top-1/3 w-3 h-3 bg-accent/50 rounded-full animate-image-orb' style={{ animationDelay: '0.8s' }} />
+                <div className='absolute -left-16 bottom-1/3 w-4 h-4 bg-primary/45 rounded-full animate-image-orb' style={{ animationDelay: '1.2s' }} />
+            </>
 
             {/* Main Image Container */}
-            <div className='hero-image relative bg-linear-to-br from-background/50 to-muted/30 backdrop-blur-sm border border-border/50 rounded-3xl p-2 shadow-2xl'>
+            <div className='hero-image relative bg-linear-to-br from-background/50 to-muted/30 border border-border/50 rounded-3xl p-2 shadow-2xl'>
               <div className='absolute inset-[-18px] rounded-4xl border border-primary/25 blur-sm' />
               <div className='relative group overflow-hidden rounded-2xl border-2 border-primary/90'>
                 <img
@@ -332,20 +259,6 @@ export default function Hero() {
                 <div className='absolute inset-0 bg-linear-to-t from-background/20 via-transparent to-transparent pointer-events-none' />
               </div>
             </div>
-
-            {/* Floating Particles Around Image */}
-            {[...Array(6)].map((_, i) => (
-              <div
-                key={i}
-                className='absolute w-2 h-2 bg-primary rounded-full animate-float-particle'
-                style={{
-                  top: `${15 + i * 15}%`,
-                  right: `${-10 + (i % 2) * 5}%`,
-                  animationDelay: `${i * 0.3}s`,
-                  animationDuration: `${4 + i * 0.5}s`,
-                }}
-              />
-            ))}
           </div>
         </div>
       </div>

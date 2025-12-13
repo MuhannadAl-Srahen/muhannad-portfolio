@@ -13,24 +13,37 @@ html {
   }
 }
 
+/* MOBILE: Keep backdrop blur disabled for performance */
+@media (max-width: 768px) {
+  /* Disable backdrop blur on mobile - still expensive */
+  .backdrop-blur-sm,
+  .backdrop-blur,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
+
 :root {
-  --background: oklch(0.95 0.01 255);
+  --background: oklch(0.98 0.004 94);
   --foreground: oklch(0.25 0.03 264.67);
-  --card: oklch(0.945 0.01 255);
+  --card: oklch(0.975 0.003 94);
   --card-foreground: oklch(0.25 0.03 264.67);
-  --popover: oklch(0.945 0.01 255);
+  --popover: oklch(0.975 0.003 94);
   --popover-foreground: oklch(0.25 0.03 264.67);
   --primary: oklch(0.88 0.18 94.01);
   --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.945 0.01 255);
+  --secondary: oklch(0.97 0.003 94);
   --secondary-foreground: oklch(0.25 0.03 264.67);
-  --muted: oklch(0.93 0.01 260);
-  --muted-foreground: oklch(0.58 0.02 264.37);
+  --muted: oklch(0.96 0.002 94);
+  --muted-foreground: oklch(0.55 0.02 264.37);
   --accent: oklch(0.83 0.17 80.01);
   --accent-foreground: oklch(0.15 0 0);
   --destructive: oklch(0.64 0.21 25.33);
-  --border: oklch(0.88 0.01 264.6);
-  --input: oklch(0.88 0.01 264.6);
+  --border: oklch(0.92 0.005 94);
+  --input: oklch(0.92 0.005 94);
   --ring: oklch(0.88 0.18 94.01);
   --chart-1: oklch(0.65 0.22 36.85);
   --chart-2: oklch(0.6 0.11 184.15);
@@ -272,27 +285,59 @@ html {
 
 /* ===== Custom Animations (GPU-optimized) ===== */
 
-/* Flying orb animation - simplified for better performance */
+/* Hero section floating orbs - subtle, performant animations */
+
+
+/* Flying orb animation - NO opacity change to prevent color flickering */
 @keyframes float-orb {
   0%, 100% {
-    transform: translate3d(0, 0, 0) scale(0.8);
-    opacity: 0.3;
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(80px, -40px, 0) scale(1.1);
-    opacity: 0.5;
+    transform: translate3d(60px, -30px, 0);
   }
 }
 
 @keyframes float-orb-reverse {
   0%, 100% {
-    transform: translate3d(0, 0, 0) scale(1);
-    opacity: 0.4;
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate3d(-50px, 60px, 0) scale(0.9);
-    opacity: 0.6;
+    transform: translate3d(-40px, 45px, 0);
   }
+}
+
+/* Random circular movements for section orbs */
+@keyframes orb-float-1 {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(50px, -40px, 0); }
+  50% { transform: translate3d(80px, 20px, 0); }
+  75% { transform: translate3d(30px, 60px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes orb-float-2 {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-45px, 55px, 0); }
+  50% { transform: translate3d(35px, 75px, 0); }
+  75% { transform: translate3d(60px, -30px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes orb-float-3 {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(65px, 40px, 0); }
+  50% { transform: translate3d(-35px, 80px, 0); }
+  75% { transform: translate3d(-50px, -25px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
+}
+
+@keyframes orb-float-4 {
+  0% { transform: translate3d(0, 0, 0); }
+  25% { transform: translate3d(-60px, -35px, 0); }
+  50% { transform: translate3d(45px, -60px, 0); }
+  75% { transform: translate3d(70px, 25px, 0); }
+  100% { transform: translate3d(0, 0, 0); }
 }
 
 /* Floating particles around image */
@@ -362,6 +407,87 @@ html {
   }
 }
 
+/* Hero section floating gradients - random circular/diagonal movements */
+@keyframes hero-float-1 {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(-30px, 40px, 0);
+  }
+  50% {
+    transform: translate3d(50px, -20px, 0);
+  }
+  75% {
+    transform: translate3d(60px, 35px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-float-2 {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(40px, -30px, 0);
+  }
+  50% {
+    transform: translate3d(-50px, 25px, 0);
+  }
+  75% {
+    transform: translate3d(-25px, -40px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes hero-float-3 {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(40px, 50px, 0);
+  }
+}
+
+/* Hero particles - 4 different random movement patterns */
+@keyframes hero-particle-1 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(-20px, 30px, 0); }
+  66% { transform: translate3d(25px, -15px, 0); }
+}
+
+@keyframes hero-particle-2 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(30px, -25px, 0); }
+  66% { transform: translate3d(-15px, 20px, 0); }
+}
+
+@keyframes hero-particle-3 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(15px, 35px, 0); }
+  66% { transform: translate3d(-30px, -10px, 0); }
+}
+
+@keyframes hero-particle-4 {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  33% { transform: translate3d(-25px, -20px, 0); }
+  66% { transform: translate3d(20px, 30px, 0); }
+}
+
+/* Floating orbs around image */
+@keyframes image-orb-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -15px, 0);
+  }
+}
+
 /* Animation utility classes */
 .animate-float-orb {
   animation: float-orb 12s ease-in-out infinite;
@@ -393,6 +519,38 @@ html {
 
 .animate-fade-in-up {
   animation: fade-in-up 0.6s ease-out forwards;
+}
+
+.animate-hero-float-1 {
+  animation: hero-float-1 25s ease-in-out infinite;
+}
+
+.animate-hero-float-2 {
+  animation: hero-float-2 30s ease-in-out infinite;
+}
+
+.animate-hero-float-3 {
+  animation: hero-float-3 20s ease-in-out infinite;
+}
+
+.animate-hero-particle-1 {
+  animation: hero-particle-1 10s ease-in-out infinite;
+}
+
+.animate-hero-particle-2 {
+  animation: hero-particle-2 12s ease-in-out infinite;
+}
+
+.animate-hero-particle-3 {
+  animation: hero-particle-3 9s ease-in-out infinite;
+}
+
+.animate-hero-particle-4 {
+  animation: hero-particle-4 13s ease-in-out infinite;
+}
+
+.animate-image-orb {
+  animation: image-orb-float 4s ease-in-out infinite;
 }
 
 /* 3D Perspective for text animations */

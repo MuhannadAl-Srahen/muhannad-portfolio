@@ -42,6 +42,76 @@ export default function Skills() {
       className='py-20 relative overflow-hidden'
     >
       <FlyingOrbs />
+      
+      {/* Decorative floating particles */}
+      <div className='absolute inset-0 z-0 pointer-events-none'>
+        {[...Array(6)].map((_, i) => (
+          <div
+            key={i}
+            className='absolute w-1.5 h-1.5 bg-accent/50 rounded-full animate-float-orb-reverse'
+            style={{
+              right: `${10 + i * 12}%`,
+              top: `${30 + (i * 15) % 60}%`,
+              animationDuration: `${11 + i}s`,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Additional side orbs */}
+      <div className='absolute inset-0 z-0 pointer-events-none'>
+        {/* Left side orbs */}
+        <div 
+          className='absolute w-3 h-3 bg-primary/50 rounded-full'
+          style={{
+            left: '5%',
+            top: '15%',
+            animation: 'orb-float-1 14s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          style={{
+            left: '8%',
+            top: '45%',
+            animation: 'orb-float-2 16s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className='absolute w-3 h-3 bg-primary/45 rounded-full'
+          style={{
+            left: '6%',
+            bottom: '25%',
+            animation: 'orb-float-3 15s ease-in-out infinite',
+          }}
+        />
+        
+        {/* Right side orbs */}
+        <div 
+          className='absolute w-2 h-2 bg-accent/55 rounded-full'
+          style={{
+            right: '7%',
+            top: '20%',
+            animation: 'orb-float-4 13s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className='absolute w-3 h-3 bg-primary/50 rounded-full'
+          style={{
+            right: '5%',
+            top: '55%',
+            animation: 'orb-float-1 17s ease-in-out infinite',
+          }}
+        />
+        <div 
+          className='absolute w-2 h-2 bg-accent/60 rounded-full'
+          style={{
+            right: '9%',
+            bottom: '20%',
+            animation: 'orb-float-2 14s ease-in-out infinite',
+          }}
+        />
+      </div>
 
       <div className='container mx-auto px-6 relative z-10'>
         {/* Section Header */}
