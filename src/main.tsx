@@ -1,9 +1,13 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { injectSpeedInsights } from '@vercel/speed-insights'
 import './index.css'
 import App from './App.tsx'
 import NotFound from './pages/NotFound.tsx'
+
+// Initialize Vercel Speed Insights on client side only
+injectSpeedInsights()
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
