@@ -50,8 +50,8 @@ export function useHero() {
 
   const handleDownloadCV = () => {
     const link = document.createElement('a')
-    link.href = '/Muhannad_Al-Srahen_Resume.pdf'
-    link.download = 'Muhannad_Al-Srahen_Resume.pdf'
+    link.href = '/Muhannad_AlSrahen_CV.pdf'
+    link.download = 'Muhannad_AlSrahen_CV.pdf'
     link.click()
   }
 
