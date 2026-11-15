@@ -1,52 +1,68 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import { profile } from '@/data'
 
-const titles = ['Full Stack Dev', 'Software Engineer', 'UI/UX Designer', 'Tech Enthusiast']
+const TYPE_SPEED_MS = 100 // per character while typing
+const DELETE_SPEED_MS = 50 // per character while erasing
+const PAUSE_MS = 2000 // how long a full title stays on screen
+const PARALLAX_STRENGTH = 3 // max pixels the photo drifts toward the cursor (same as before)
 
+const titles = profile.heroTitles
 
 export function useHero() {
-  const [currentTitleIndex, setCurrentTitleIndex] = useState(0)
+  const [titleIndex, setTitleIndex] = useState(0)
   const [displayText, setDisplayText] = useState('')
   const [isDeleting, setIsDeleting] = useState(false)
-  const [isComplete, setIsComplete] = useState(false)
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  // The element that follows the mouse. We move it directly through its style
+  // instead of React state, so the hero does not re-render on every mouse move.
+  const parallaxRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
+    let frame = 0
+
     const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth - 0.5) * 20,
-        y: (e.clientY / window.innerHeight - 0.5) * 20,
+      cancelAnimationFrame(frame) // at most one style update per screen frame
+      frame = requestAnimationFrame(() => {
+        if (!parallaxRef.current) return
+        const x = (e.clientX / window.innerWidth - 0.5) * 2 * PARALLAX_STRENGTH
+        const y = (e.clientY / window.innerHeight - 0.5) * 2 * PARALLAX_STRENGTH
+        parallaxRef.current.style.transform = `translate(${x}px, ${y}px)`
       })
     }
 
-    window.addEventListener('mousemove', handleMouseMove)
-    return () => window.removeEventListener('mousemove', handleMouseMove)
+    window.addEventListener('mousemove', handleMouseMove, { passive: true })
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove)
+      cancelAnimationFrame(frame)
+    }
   }, [])
 
+  // Typewriter: type a title, pause, erase it, then move on to the next one.
+  // Each run of this effect schedules exactly one step, and the cleanup cancels it,
+  // so no stray timers are left behind.
   useEffect(() => {
-    const currentTitle = titles[currentTitleIndex]
-    const typeSpeed = isDeleting ? 50 : 100
-    const pauseDuration = isComplete ? 2000 : 0
+    const fullTitle = titles[titleIndex]
+    let delay = isDeleting ? DELETE_SPEED_MS : TYPE_SPEED_MS
+    let step: () => void
 
-    const timeout = setTimeout(() => {
-      if (!isDeleting && displayText === currentTitle) {
-        setIsComplete(true)
-        setTimeout(() => {
-          setIsDeleting(true)
-          setIsComplete(false)
-        }, pauseDuration)
-      } else if (isDeleting && displayText === '') {
+    if (!isDeleting && displayText === fullTitle) {
+      // finished typing: wait, then start erasing
+      delay = PAUSE_MS
+      step = () => setIsDeleting(true)
+    } else if (isDeleting && displayText === '') {
+      // finished erasing: switch to the next title
+      step = () => {
         setIsDeleting(false)
-        setCurrentTitleIndex((prev) => (prev + 1) % titles.length)
-      } else {
-        const nextText = isDeleting
-          ? currentTitle.substring(0, displayText.length - 1)
-          : currentTitle.substring(0, displayText.length + 1)
-        setDisplayText(nextText)
+        setTitleIndex((index) => (index + 1) % titles.length)
       }
-    }, typeSpeed)
+    } else {
+      // add or remove one character
+      const nextLength = displayText.length + (isDeleting ? -1 : 1)
+      step = () => setDisplayText(fullTitle.slice(0, nextLength))
+    }
 
+    const timeout = setTimeout(step, delay)
     return () => clearTimeout(timeout)
-  }, [displayText, isDeleting, currentTitleIndex, isComplete])
+  }, [displayText, isDeleting, titleIndex])
 
   const handleDownloadCV = () => {
     const link = document.createElement('a')
@@ -62,7 +78,7 @@ export function useHero() {
 
   return {
     displayText,
-    mousePosition,
+    parallaxRef,
     handleDownloadCV,
     handleGetInTouch,
   }

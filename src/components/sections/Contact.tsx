@@ -11,52 +11,9 @@ import {
   FileText,
   MessageSquare,
 } from 'lucide-react'
-import { FaGithub, FaLinkedin, FaInstagram, FaTwitter } from 'react-icons/fa'
 import { SectionHeader, FlyingOrbs, Card } from '@/components/common'
-
-interface FormData {
-  name: string
-  email: string
-  subject: string
-  message: string
-}
-
-interface FormErrors {
-  name?: string
-  email?: string
-  message?: string
-}
-
-const socialLinks = [
-  {
-    name: 'GitHub',
-    href: 'https://github.com/MuhannadAl-Srahen',
-    icon: FaGithub,
-    color: '#181717',
-    description: 'Check out my code',
-  },
-  {
-    name: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/muhannad-alsrahen/',
-    icon: FaLinkedin,
-    color: '#0A66C2',
-    description: "Let's connect",
-  },
-  {
-    name: 'Twitter',
-    href: 'https://x.com/_glock_x',
-    icon: FaTwitter,
-    color: '#1DA1F2',
-    description: 'Follow my journey',
-  },
-  {
-    name: 'Instagram',
-    href: 'https://www.instagram.com/_glock_x/',
-    icon: FaInstagram,
-    color: '#E4405F',
-    description: 'Behind the scenes',
-  },
-]
+import { contactInfo, contactMethods, socialLinks } from '@/data'
+import type { ContactFormData, ContactFormErrors } from '@/types'
 
 export default function Contact() {
   const sectionRef = useRef<HTMLElement>(null)
@@ -64,13 +21,13 @@ export default function Contact() {
   const infoRef = useRef<HTMLDivElement>(null)
   const formRef = useRef<HTMLFormElement>(null)
 
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<ContactFormData>({
     name: '',
     email: '',
     subject: '',
     message: '',
   })
-  const [errors, setErrors] = useState<FormErrors>({})
+  const [errors, setErrors] = useState<ContactFormErrors>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [focusedField, setFocusedField] = useState<string | null>(null)
@@ -137,7 +94,7 @@ export default function Contact() {
   }, [])
 
   const validateForm = (): boolean => {
-    const newErrors: FormErrors = {}
+    const newErrors: ContactFormErrors = {}
 
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required'
@@ -204,7 +161,7 @@ export default function Contact() {
     setFormData((prev) => ({ ...prev, [name]: value }))
 
     // Clear error when user starts typing
-    if (errors[name as keyof FormErrors]) {
+    if (errors[name as keyof ContactFormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }))
     }
   }
@@ -218,7 +175,7 @@ export default function Contact() {
         ? 'border-destructive focus:border-destructive focus:ring-2 focus:ring-destructive/20'
         : focusedField === fieldName
         ? 'border-primary ring-2 ring-primary/20'
-        : 'border-border hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20'
+        : 'border-input hover:border-primary/50 focus:border-primary focus:ring-2 focus:ring-primary/20'
     }
   `
 
@@ -307,31 +264,29 @@ export default function Contact() {
             >
               {/* Quick Contact Cards */}
               <div className='space-y-3 sm:space-y-4'>
-                <a
-                  href='mailto:muhannadalsrahen@gmail.com'
-                  className='block'
-                >
-                  <Card
-                    hoverable={true}
-                    className='group'
-                    padding='md'
-                  >
-                    <div className='flex items-center gap-3 sm:gap-4'>
-                      <div className='shrink-0 w-11 h-11 sm:w-12 sm:h-12 bg-primary/10 border border-primary/20 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300'>
-                        <Mail className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
-                      </div>
-                      <div className='flex-1 min-w-0'>
-                        <p className='font-medium text-foreground group-hover:text-primary transition-colors duration-300 ease-out'>
-                          Email Me
-                        </p>
-                        <p className='text-sm text-muted-foreground truncate'>
-                          muhannadalsrahen@gmail.com
-                        </p>
-                      </div>
-                      <ArrowUpRight className='shrink-0 w-4 h-4 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out' />
-                    </div>
-                  </Card>
-                </a>
+                {contactMethods.map((method) => {
+                  const IconComponent = method.icon
+                  return (
+                    <a key={method.label} href={method.href} className='block'>
+                      <Card hoverable={true} className='group' padding='md'>
+                        <div className='flex items-center gap-3 sm:gap-4'>
+                          <div className='shrink-0 w-11 h-11 sm:w-12 sm:h-12 bg-primary/10 border border-primary/20 rounded-lg sm:rounded-xl flex items-center justify-center group-hover:border-primary/30 transition-colors duration-300'>
+                            <IconComponent className='w-4 h-4 sm:w-5 sm:h-5 text-primary' />
+                          </div>
+                          <div className='flex-1 min-w-0'>
+                            <p className='font-medium text-foreground group-hover:text-primary transition-colors duration-300 ease-out'>
+                              {method.label}
+                            </p>
+                            <p className='text-sm text-muted-foreground truncate'>
+                              {method.value}
+                            </p>
+                          </div>
+                          <ArrowUpRight className='shrink-0 w-4 h-4 text-muted-foreground group-hover:text-primary opacity-0 group-hover:opacity-100 transition-all duration-300 ease-out' />
+                        </div>
+                      </Card>
+                    </a>
+                  )
+                })}
 
                 <Card hoverable={true} padding='md' className='group'>
                   <div className='flex items-center gap-3 sm:gap-4'>
@@ -341,7 +296,7 @@ export default function Contact() {
                     <div>
                       <p className='font-medium text-foreground group-hover:text-accent transition-colors duration-300 ease-out'>Location</p>
                       <p className='text-sm text-muted-foreground'>
-                        Amman, Jordan 🇯🇴
+                        {contactInfo.location}
                       </p>
                     </div>
                   </div>
@@ -364,9 +319,9 @@ export default function Contact() {
 
               {/* Social Links */}
               <div className='space-y-3 sm:space-y-4'>
-                <h4 className='text-base sm:text-lg font-semibold text-foreground'>
+                <h3 className='text-base sm:text-lg font-semibold text-foreground'>
                   Find me on
-                </h4>
+                </h3>
                 <div className='grid grid-cols-2 gap-2 sm:gap-3'>
                   {socialLinks.map((link) => {
                     const IconComponent = link.icon
@@ -403,9 +358,11 @@ export default function Contact() {
               onSubmit={handleSubmit}
               className='lg:col-span-2 opacity-0 translate-x-8 transition-all duration-700 ease-[cubic-bezier(0.34,1.56,0.64,1)] [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0'
             >
-              <Card hoverable={false} padding='lg' className='h-full'>
+              {/* The card stretches to the height of the left column; the Message box
+                  (flex-1) takes up the extra space so there's no empty gap under the button */}
+              <Card hoverable={false} padding='lg' className='h-full flex flex-col'>
                 {isSubmitted ? (
-                  <div className='flex flex-col items-center justify-center py-12 text-center'>
+                  <div className='flex-1 flex flex-col items-center justify-center py-12 text-center'>
                     <div className='w-20 h-20 bg-green-500/10 rounded-full flex items-center justify-center mb-6'>
                       <CheckCircle className='w-10 h-10 text-green-500' />
                     </div>
@@ -417,7 +374,7 @@ export default function Contact() {
                     </p>
                   </div>
                 ) : (
-                  <div className='space-y-4 sm:space-y-6'>
+                  <div className='flex-1 flex flex-col space-y-4 sm:space-y-6'>
                     <div className='grid md:grid-cols-2 gap-4 sm:gap-6'>
                       {/* Name Field */}
                       <div className='space-y-2'>
@@ -499,8 +456,8 @@ export default function Contact() {
                       />
                     </div>
 
-                    {/* Message Field */}
-                    <div className='space-y-2'>
+                    {/* Message Field (grows to fill the card) */}
+                    <div className='flex-1 flex flex-col space-y-2'>
                       <label
                         htmlFor='message'
                         className='text-sm font-medium text-foreground flex items-center gap-2'
@@ -517,7 +474,7 @@ export default function Contact() {
                         onBlur={() => setFocusedField(null)}
                         placeholder="Tell me about your project..."
                         rows={5}
-                        className={`${inputClasses('message', !!errors.message)} resize-none`}
+                        className={`${inputClasses('message', !!errors.message)} resize-none flex-1 min-h-32`}
                       />
                       {errors.message && (
                         <p className='text-sm text-destructive'>

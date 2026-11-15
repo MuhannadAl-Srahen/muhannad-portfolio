@@ -1,8 +1,8 @@
 {
   "name": "Muhannad Al-Srahen Portfolio",
   "short_name": "Muhannad Portfolio",
-  "description": "Full Stack Developer Portfolio - React, TypeScript, Node.js",
-  "start_url": "https://muhannadalsrahen.dev",
+  "description": "Frontend Developer Portfolio: React, Next.js, TypeScript",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#f5c542",
@@ -25,9 +25,9 @@
   "screenshots": [
     {
       "src": "/og-preview.webp",
-      "sizes": "1200x630",
+      "sizes": "1066x1600",
       "type": "image/webp",
-      "form_factor": "wide"
+      "form_factor": "narrow"
     }
   ]
 }

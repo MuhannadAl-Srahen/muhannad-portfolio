@@ -4,6 +4,10 @@
 /* Smooth scrolling for the entire page */
 html {
   scroll-behavior: smooth;
+  /* Reserve the scrollbar's space from the first paint. Without this, the
+     scrollbar appears once the page renders, the page gets ~12px narrower and
+     everything positioned in % jumps sideways (a layout shift on desktop). */
+  scrollbar-gutter: stable;
 }
 
 /* Disable smooth scroll when user prefers reduced motion */
@@ -27,24 +31,27 @@ html {
 }
 
 :root {
-  --background: oklch(0.98 0.004 94);
+  --background: oklch(0.965 0.006 94);
   --foreground: oklch(0.25 0.03 264.67);
-  --card: oklch(0.975 0.003 94);
+  /* Light theme readability: cards are white on a slightly darker cream page so they
+     stand out, and the brand yellow is a deeper gold here because bright yellow text on
+     a near-white page was only ~1.4:1 contrast (dark mode keeps the bright yellow). */
+  --card: oklch(1 0 0);
   --card-foreground: oklch(0.25 0.03 264.67);
-  --popover: oklch(0.975 0.003 94);
+  --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.25 0.03 264.67);
-  --primary: oklch(0.88 0.18 94.01);
+  --primary: oklch(0.6 0.145 72);
   --primary-foreground: oklch(0.15 0 0);
-  --secondary: oklch(0.97 0.003 94);
+  --secondary: oklch(0.95 0.004 94);
   --secondary-foreground: oklch(0.25 0.03 264.67);
-  --muted: oklch(0.96 0.002 94);
-  --muted-foreground: oklch(0.55 0.02 264.37);
-  --accent: oklch(0.83 0.17 80.01);
+  --muted: oklch(0.94 0.004 94);
+  --muted-foreground: oklch(0.48 0.02 264.37);
+  --accent: oklch(0.56 0.15 55);
   --accent-foreground: oklch(0.15 0 0);
   --destructive: oklch(0.64 0.21 25.33);
-  --border: oklch(0.92 0.005 94);
-  --input: oklch(0.92 0.005 94);
-  --ring: oklch(0.88 0.18 94.01);
+  --border: oklch(0.88 0.006 94);
+  --input: oklch(0.85 0.006 94);
+  --ring: oklch(0.6 0.145 72);
   --chart-1: oklch(0.65 0.22 36.85);
   --chart-2: oklch(0.6 0.11 184.15);
   --chart-3: oklch(0.4 0.07 227.18);
@@ -67,19 +74,20 @@ html {
 
   --radius: 1.025rem;
 
-  --shadow-2xs: 0px 1px 3px 0px oklch(0 0 0 / 0.01);
-  --shadow-xs: 0px 1px 3px 0px oklch(0 0 0 / 0.01);
-  --shadow-sm: 0px 1px 3px 0px oklch(0 0 0 / 0.01),
-    0px 1px 2px -1px oklch(0 0 0 / 0.01);
-  --shadow: 0px 1px 3px 0px oklch(0 0 0 / 0.01),
-    0px 1px 2px -1px oklch(0 0 0 / 0.01);
-  --shadow-md: 0px 1px 3px 0px oklch(0 0 0 / 0.01),
-    0px 2px 4px -1px oklch(0 0 0 / 0.01);
-  --shadow-lg: 0px 1px 3px 0px oklch(0 0 0 / 0.01),
-    0px 4px 6px -1px oklch(0 0 0 / 0.01);
-  --shadow-xl: 0px 1px 3px 0px oklch(0 0 0 / 0.01),
-    0px 8px 10px -1px oklch(0 0 0 / 0.01);
-  --shadow-2xl: 0px 1px 3px 0px oklch(0 0 0 / 0.03);
+  /* Soft but visible shadows so white cards lift off the cream page (were 1% opacity) */
+  --shadow-2xs: 0px 1px 2px 0px oklch(0.3 0.02 80 / 0.05);
+  --shadow-xs: 0px 1px 2px 0px oklch(0.3 0.02 80 / 0.06);
+  --shadow-sm: 0px 1px 3px 0px oklch(0.3 0.02 80 / 0.08),
+    0px 1px 2px -1px oklch(0.3 0.02 80 / 0.06);
+  --shadow: 0px 1px 3px 0px oklch(0.3 0.02 80 / 0.08),
+    0px 1px 2px -1px oklch(0.3 0.02 80 / 0.06);
+  --shadow-md: 0px 4px 8px -2px oklch(0.3 0.02 80 / 0.08),
+    0px 2px 4px -2px oklch(0.3 0.02 80 / 0.06);
+  --shadow-lg: 0px 10px 20px -6px oklch(0.3 0.02 80 / 0.1),
+    0px 4px 8px -4px oklch(0.3 0.02 80 / 0.06);
+  --shadow-xl: 0px 18px 32px -10px oklch(0.3 0.02 80 / 0.12),
+    0px 8px 12px -6px oklch(0.3 0.02 80 / 0.06);
+  --shadow-2xl: 0px 24px 48px -16px oklch(0.3 0.02 80 / 0.18);
 }
 
 .dark {
@@ -99,7 +107,8 @@ html {
   --accent-foreground: oklch(0.15 0 0);
   --destructive: oklch(0.4 0.13 25.73);
   --border: oklch(0.15 0 0);
-  --input: oklch(0.15 0 0);
+  /* Lighter than the card (0.18) so form fields have a visible edge in dark mode */
+  --input: oklch(0.3 0 0);
   --ring: oklch(0.88 0.18 94.01);
   --chart-1: oklch(0.49 0.24 264.4);
   --chart-2: oklch(0.7 0.16 160.43);
@@ -248,73 +257,8 @@ html {
     scrollbar-color: var(--color-primary) var(--color-background);
   }
   
-  /* Global smooth transitions for theme changes - applies when theme is switching */
-  /* Only transition body and major containers for better performance */
-  html[data-theme-transition="true"] body,
-  html[data-theme-transition="true"] main,
-  html[data-theme-transition="true"] section,
-  html[data-theme-transition="true"] div[class*="bg-"],
-  html[data-theme-transition="true"] div[class*="card"],
-  html[data-theme-transition="true"] button,
-  html[data-theme-transition="true"] a {
-    transition: background-color 120ms ease-out, color 120ms ease-out, border-color 120ms ease-out !important;
-  }
-  
-  /* Mobile: Instant theme switch with minimal transition */
-  @media (max-width: 768px) {
-    html[data-theme-transition="true"] body,
-    html[data-theme-transition="true"] main,
-    html[data-theme-transition="true"] section,
-    html[data-theme-transition="true"] div[class*="bg-"],
-    html[data-theme-transition="true"] div[class*="card"],
-    html[data-theme-transition="true"] button,
-    html[data-theme-transition="true"] a {
-      transition: background-color 50ms linear, color 50ms linear !important;
-    }
-  }
-  
-  /* Optimize repainting during theme switch */
-  html[data-theme-transition="true"] {
-    will-change: background-color;
-    transform: translateZ(0); /* Force GPU acceleration */
-  }
-  
-  /* Preserve Tailwind hover/interactive transitions */
-  html[data-theme-transition="true"] [class*="hover"]:hover,
-  html[data-theme-transition="true"] [class*="focus"]:focus,
-  html[data-theme-transition="true"] [class*="active"]:active {
-    transition-property: all;
-    transition-duration: 200ms;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  }
-  
-  /* Pause expensive animations during theme transition for better performance */
-  html[data-theme-transition="true"] [class*="animate-"],
-  html[data-theme-transition="true"] [style*="animation"] {
-    animation-play-state: paused !important;
-  }
-
-  /* Navbar optimizations */
-  html[data-theme-transition="true"] header {
-    transition: background-color 80ms linear, border-color 80ms linear !important;
-  }
-  
-  @media (max-width: 768px) {
-    html[data-theme-transition="true"] header {
-      transition: background-color 40ms linear !important;
-    }
-  }
-
-  /* Completely disable all backdrop filters during theme switch */
-  html[data-theme-transition="true"] * {
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-  }
-}
-
-/* Theme transition utilities */
-@layer utilities {
-  /* No additional utilities needed - transitions are handled at base layer */
+  /* Theme switching: see applyThemeClass() in src/contexts/ThemeContext.tsx.
+     It turns transitions off for one frame so every color changes together. */
 }
 
 /* ===== Scrollbar Utilities ===== */
@@ -331,9 +275,6 @@ html {
 }
 
 /* ===== Custom Animations (GPU-optimized) ===== */
-
-/* Hero section floating orbs - subtle, performant animations */
-
 
 /* Flying orb animation - NO opacity change to prevent color flickering */
 @keyframes float-orb {
@@ -387,18 +328,6 @@ html {
   100% { transform: translate3d(0, 0, 0); }
 }
 
-/* Floating particles around image */
-@keyframes float-particle {
-  0%, 100% {
-    transform: translate3d(0, 0, 0) scale(0.8);
-    opacity: 0.4;
-  }
-  50% {
-    transform: translate3d(0, -25px, 0) scale(1.2);
-    opacity: 1;
-  }
-}
-
 /* Slow pulse for large background orbs - simplified */
 @keyframes pulse-slow {
   0%, 100% {
@@ -408,18 +337,6 @@ html {
   50% {
     transform: scale3d(1.1, 1.1, 1);
     opacity: 0.45;
-  }
-}
-
-/* Breathing animation for ambient lights */
-@keyframes breathe {
-  0%, 100% {
-    transform: scale3d(0.95, 0.95, 1);
-    opacity: 0.25;
-  }
-  50% {
-    transform: scale3d(1.05, 1.05, 1);
-    opacity: 0.35;
   }
 }
 
@@ -451,6 +368,76 @@ html {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* ===== Entrance animations (replace the old GSAP code) =====
+   Pure CSS, so they run on the GPU with no JavaScript. Each class plays once when
+   the element appears. Tune it per element with CSS variables in Tailwind, e.g.
+   className='enter-up [--enter-delay:0.6s] [--enter-distance:30px]'.
+   Keyframes with only `from` animate back to the element's normal style. */
+@keyframes enter-up {
+  from { opacity: 0; transform: translateY(var(--enter-distance, 20px)); }
+}
+@keyframes enter-left {
+  from { opacity: 0; transform: translateX(-50px); }
+}
+@keyframes enter-right {
+  from { opacity: 0; transform: translateX(50px); }
+}
+@keyframes enter-fade {
+  from { opacity: 0; }
+}
+@keyframes enter-zoom {
+  from { opacity: 0; transform: scale(0.8); filter: blur(10px); }
+}
+@keyframes enter-drop {
+  from { opacity: 0; transform: translateY(-20px) scale(0.95); }
+}
+@keyframes enter-pop {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+}
+
+.enter-up,
+.enter-left,
+.enter-right,
+.enter-fade,
+.enter-zoom,
+.enter-drop,
+.enter-pop {
+  animation-duration: var(--enter-duration, 0.8s);
+  animation-timing-function: var(--enter-ease, cubic-bezier(0.33, 1, 0.68, 1)); /* same curve as GSAP power2.out */
+  animation-delay: var(--enter-delay, 0s);
+  animation-fill-mode: both; /* stay hidden during the delay, stay visible after */
+}
+.enter-up { animation-name: enter-up; }
+.enter-left { animation-name: enter-left; }
+.enter-right { animation-name: enter-right; }
+.enter-fade { animation-name: enter-fade; }
+.enter-zoom { animation-name: enter-zoom; }
+.enter-drop { animation-name: enter-drop; }
+.enter-pop { animation-name: enter-pop; }
+
+/* Background orbs drifting back and forth (was a never-ending GSAP tween).
+   Each orb sets its own animation-delay so they don't move in sync. */
+@keyframes bg-orb-drift {
+  to { transform: translate(10px, 20px); }
+}
+.bg-orb {
+  animation: bg-orb-drift 6s cubic-bezier(0.37, 0, 0.63, 1) infinite alternate; /* GSAP sine.inOut */
+}
+
+/* Respect the visitor's "reduce motion" setting */
+@media (prefers-reduced-motion: reduce) {
+  .enter-up,
+  .enter-left,
+  .enter-right,
+  .enter-fade,
+  .enter-zoom,
+  .enter-drop,
+  .enter-pop,
+  .bg-orb {
+    animation: none;
   }
 }
 
@@ -488,15 +475,6 @@ html {
   }
   100% {
     transform: translate3d(0, 0, 0);
-  }
-}
-
-@keyframes hero-float-3 {
-  0%, 100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(40px, 50px, 0);
   }
 }
 
@@ -544,16 +522,8 @@ html {
   animation: float-orb-reverse 15s ease-in-out infinite;
 }
 
-.animate-float-particle {
-  animation: float-particle 4s ease-in-out infinite;
-}
-
 .animate-pulse-slow {
   animation: pulse-slow 20s ease-in-out infinite;
-}
-
-.animate-breathe {
-  animation: breathe 18s ease-in-out infinite;
 }
 
 .animate-spin-slow {
@@ -576,10 +546,6 @@ html {
   animation: hero-float-2 30s ease-in-out infinite;
 }
 
-.animate-hero-float-3 {
-  animation: hero-float-3 20s ease-in-out infinite;
-}
-
 .animate-hero-particle-1 {
   animation: hero-particle-1 10s ease-in-out infinite;
 }
@@ -600,76 +566,6 @@ html {
   animation: image-orb-float 4s ease-in-out infinite;
 }
 
-/* 3D Perspective for text animations */
-.perspective-1000 {
-  perspective: 1000px;
-}
-
-/* 3D Card Flip Styles */
-.preserve-3d {
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-}
-
-.backface-hidden {
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-}
-
-.rotate-y-180 {
-  transform: rotateY(180deg);
-}
-
-/* Fix for 3D flip card - prevent content bleeding through */
-.flip-card-inner {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  /* Transition is now handled inline in component for better control */
-  transform-style: preserve-3d;
-  -webkit-transform-style: preserve-3d;
-  /* GPU acceleration for smooth flip */
-  -webkit-perspective: 1200px;
-  perspective: 1200px;
-}
-
-.flip-card-face {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  -moz-backface-visibility: hidden;
-  /* GPU acceleration */
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
-  /* Hardware acceleration hints */
-  will-change: transform;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* Front face - slightly forward */
-.flip-card-face:not(.flip-card-back) {
-  z-index: 2;
-  transform: rotateY(0deg) translateZ(1px);
-}
-
-.flip-card-back {
-  transform: rotateY(180deg) translateZ(1px);
-  z-index: 1;
-}
-
-/* Staggered animation delays */
-.animate-delay-100 { animation-delay: 0.1s; }
-.animate-delay-200 { animation-delay: 0.2s; }
-.animate-delay-300 { animation-delay: 0.3s; }
-.animate-delay-400 { animation-delay: 0.4s; }
-.animate-delay-500 { animation-delay: 0.5s; }
-
 /* Modal Animations */
 @keyframes modalSlideIn {
   0% {
@@ -682,72 +578,11 @@ html {
   }
 }
 
-@keyframes modalFadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 /* Hide navbar when modal is open */
 body.modal-open header,
-body.modal-open nav,
-body.modal-open [data-navbar] {
+body.modal-open nav {
   opacity: 0 !important;
   pointer-events: none !important;
   visibility: hidden !important;
   z-index: 0 !important;
 }
-
-/* ===== Link Hover Effects ===== */
-
-/* Animated underline for links */
-a.link-underline {
-  position: relative;
-  text-decoration: none;
-  background-image: linear-gradient(
-    to right,
-    var(--color-primary),
-    var(--color-primary) 50%,
-    transparent 50%
-  );
-  background-size: 200% 2px;
-  background-repeat: no-repeat;
-  background-position: 100% 100%;
-  transition: background-position 0.3s ease;
-  padding-bottom: 2px;
-}
-
-a.link-underline:hover {
-  background-position: 0 100%;
-}
-
-/* Glowing text on hover */
-.text-glow-hover {
-  transition: text-shadow 0.3s ease;
-}
-
-.text-glow-hover:hover {
-  text-shadow: 0 0 20px var(--color-primary),
-               0 0 40px var(--color-primary),
-               0 0 60px var(--color-primary);
-}
-
-/* Smooth gradient border animation */
-@keyframes borderGlow {
-  0%, 100% {
-    border-color: var(--color-primary);
-    box-shadow: 0 0 5px var(--color-primary);
-  }
-  50% {
-    border-color: var(--color-accent);
-    box-shadow: 0 0 15px var(--color-accent);
-  }
-}
-
-.border-animate-glow {
-  animation: borderGlow 3s ease-in-out infinite;
-}
-

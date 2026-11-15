@@ -1,22 +1,29 @@
-import { StrictMode } from 'react'
+import { StrictMode, Suspense, lazy } from 'react'
 import { createRoot } from 'react-dom/client'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { injectSpeedInsights } from '@vercel/speed-insights'
 import './index.css'
 import App from './App.tsx'
-import NotFound from './pages/NotFound.tsx'
+
+// The 404 page is loaded only when someone actually lands on a wrong URL
+const NotFound = lazy(() => import('./pages/NotFound.tsx'))
 
 // Initialize Vercel Speed Insights on client side only
 injectSpeedInsights()
 
+// The site has two pages: the portfolio at "/" and a 404 for anything else.
+// Vercel sends every URL to index.html, so a simple path check picks the page.
+// (A router library did this before, but added ~20 KB of JavaScript to every visit.)
+const isHomePage = ['/', '/index.html'].includes(window.location.pathname)
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<App />} />
-        <Route path='*' element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    {isHomePage ? (
+      <App />
+    ) : (
+      <Suspense fallback={null}>
+        <NotFound />
+      </Suspense>
+    )}
   </StrictMode>,
 )
 

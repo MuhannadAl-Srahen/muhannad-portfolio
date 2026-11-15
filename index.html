@@ -13,10 +13,10 @@
     <!-- Apple touch icon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Muhannad Al-Srahen | Full Stack Developer - Modern Web Applications & Projects</title>
+    <title>Muhannad Al-Srahen | Frontend Developer</title>
     <meta
       name="description"
-      content="Muhannad Al-Srahen - Full Stack Developer building modern web applications and projects. Specializing in code development with React, TypeScript, Node.js. View my portfolio of exceptional projects."
+      content="Muhannad Al-Srahen, Frontend Developer in Amman, Jordan with 2+ years of experience building production web apps with React, Next.js and TypeScript."
     />
     <meta name="author" content="Muhannad Al-Srahen" />
     <meta name="robots" content="index, follow" />
@@ -24,52 +24,56 @@
     <meta name="revisit-after" content="7 days" />
     <meta
       name="keywords"
-      content="Full Stack Developer, Software Engineer, React, TypeScript, Node.js, Next.js, Web Development, Backend Development, UI/UX, Jordan, Muhannad, modern web applications, code projects, portfolio"
+      content="Frontend Developer, React, Next.js, TypeScript, JavaScript, Tailwind CSS, Web Development, Amman, Jordan, Muhannad Al-Srahen, portfolio"
     />
-    
+
     <!-- Open Graph Meta Tags -->
-    <meta
-      property="og:title"
-      content="Muhannad Al-Srahen - Full Stack Developer | Modern Web Applications & Code Projects"
-    />
+    <meta property="og:title" content="Muhannad Al-Srahen | Frontend Developer" />
     <meta
       property="og:description"
-      content="Full Stack Developer building modern web applications and exceptional code projects with React, TypeScript, Node.js. Portfolio showcasing professional projects and development skills."
+      content="Frontend Developer with 2+ years of experience building production web apps with React, Next.js and TypeScript."
     />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.muhannadalsrahen.dev" />
+    <meta property="og:url" content="https://www.muhannadalsrahen.dev/" />
     <meta
       property="og:image"
       content="https://www.muhannadalsrahen.dev/og-preview.webp"
     />
     <meta property="og:image:type" content="image/webp" />
-    <meta property="og:image:width" content="800" />
-    <meta property="og:image:height" content="1000" />
-    <meta property="og:image:alt" content="Muhannad Al-Srahen - Full Stack Developer" />
+    <meta property="og:image:width" content="1066" />
+    <meta property="og:image:height" content="1600" />
+    <meta property="og:image:alt" content="Muhannad Al-Srahen, Frontend Developer" />
     <meta property="og:locale" content="en_US" />
 
-    <!-- Twitter Card Meta Tags -->
+    <!-- Twitter Card Meta Tags (control link previews on X, not tied to an account) -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Muhannad Al-Srahen - Modern Web Applications & Code Projects"
-    />
+    <meta name="twitter:title" content="Muhannad Al-Srahen | Frontend Developer" />
     <meta
       name="twitter:description"
-      content="Full Stack Developer building modern applications and code projects. Portfolio showcasing exceptional web development projects."
+      content="Frontend Developer with 2+ years of experience building production web apps with React, Next.js and TypeScript."
     />
-    <metawww.muhannadalsrahen.dev/og-preview.webp"
+    <meta
+      name="twitter:image"
+      content="https://www.muhannadalsrahen.dev/og-preview.webp"
     />
-    <meta name="twitter:image:alt" content="Muhannad Al-Srahen - Full Stack Developer"   name="twitter:image"
-      content="https://muhannadalsrahen.dev/og-preview.webp"
-    />
+    <meta name="twitter:image:alt" content="Muhannad Al-Srahen, Frontend Developer" />
     <meta name="twitter:site" content="@_glock_x" />
     <meta name="twitter:creator" content="@_glock_x" />
-    
+
     <!-- Additional SEO Tags -->
     <meta name="theme-color" content="#f5c542" />
     <link rel="manifest" href="/manifest.json" />
-    <link rel="preload" as="image" href="/src/assets/images/My_personal_image.webp?w=800" fetchpriority="high" imagesrcset="/src/assets/images/My_personal_image.webp?w=400 400w, /src/assets/images/My_personal_image.webp?w=600 600w, /src/assets/images/My_personal_image.webp?w=800 800w" imagesizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px" />
+    <!-- Start downloading the hero photo early. imagesrcset/imagesizes must match the
+         <img srcSet/sizes> in Hero.tsx exactly, so the browser picks the same file once. -->
+    <link
+      rel="preload"
+      as="image"
+      href="/src/assets/images/profile/hero-1066.webp"
+      imagesrcset="/src/assets/images/profile/hero-480.webp 480w, /src/assets/images/profile/hero-640.webp 640w, /src/assets/images/profile/hero-1066.webp 1066w"
+      imagesizes="(max-width: 480px) calc(100vw - 64px), 448px"
+      fetchpriority="high"
+    />
+    <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     
@@ -79,14 +83,15 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Muhannad Al-Srahen",
-      "url": "https://muhannadalsrahen.dev",
+      "url": "https://www.muhannadalsrahen.dev/",
       "image": "https://www.muhannadalsrahen.dev/og-preview.webp",
-      "jobTitle": "Full Stack Developer",
-      "description": "Passionate Full Stack Developer and Software Engineer specializing in React, TypeScript, Node.js, and modern web technologies.",
+      "jobTitle": "Frontend Developer",
+      "description": "Frontend Developer with 2+ years of experience building production web apps with React, Next.js and TypeScript.",
       "sameAs": [
         "https://github.com/MuhannadAl-Srahen",
-        "https://linkedin.com/in/muhannad-alsrahen",
-        "https://twitter.com/_glock_x"
+        "https://www.linkedin.com/in/muhannad-alsraheen",
+        "https://x.com/_glock_x",
+        "https://www.instagram.com/_glock_x/"
       ],
       "workLocation": {
         "@type": "Place",
@@ -100,15 +105,7 @@
       "@context": "https://schema.org",
       "@type": "WebSite",
       "name": "Muhannad Al-Srahen Portfolio",
-      "url": "https://muhannadalsrahen.dev",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://muhannadalsrahen.dev"
-        },
-        "query-input": "required name=search_term_string"
-      }
+      "url": "https://www.muhannadalsrahen.dev/"
     }
     </script>
     
@@ -125,9 +122,6 @@
         root.classList.add(theme)
       })()
     </script>
-
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.muhannadalsrahen.dev/" />
 
     <style>
       #preloader{position:fixed;inset:0;display:grid;place-items:center;background:color-mix(in oklch,var(--color-background,#0b0b0d) 92%,black 8%);color:var(--color-primary,currentColor);z-index:9999;transition:opacity 200ms ease}#preloader.fade-out{opacity:0;pointer-events:none}.loader{position:relative;width:60px;height:60px;color:var(--color-primary,currentColor);filter:drop-shadow(0 0 10px color-mix(in oklch,currentColor 45%,transparent))}.loader::before,.loader::after{content:'';position:absolute;inset:0;border-radius:50%;border:4px solid transparent}.loader::before{border-color:color-mix(in oklch,currentColor 70%,transparent);border-top-color:currentColor;border-right-color:color-mix(in oklch,currentColor 30%,transparent);animation:spin .95s ease-in-out infinite}.loader::after{inset:8px;border-color:color-mix(in oklch,var(--color-foreground,currentColor) 55%,transparent);border-bottom-color:currentColor;border-left-color:color-mix(in oklch,currentColor 25%,transparent);animation:spin 1.25s ease-in-out infinite reverse}.loader .dot{position:absolute;inset:50%;width:12px;height:12px;margin:-6px;border-radius:50%;background:color-mix(in oklch,currentColor 88%,var(--color-foreground,#fff) 12%);box-shadow:0 0 12px color-mix(in oklch,currentColor 60%,transparent);animation:pulse 1.8s ease-in-out infinite}@keyframes spin{to{transform:rotate(360deg)}}@keyframes pulse{0%,100%{transform:scale(.85);opacity:.8}50%{transform:scale(1.08);opacity:1}}

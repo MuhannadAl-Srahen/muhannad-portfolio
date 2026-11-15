@@ -47,11 +47,10 @@ export default function Skills() {
       <div className='absolute inset-0 z-0 pointer-events-none'>
         {[...Array(6)].map((_, i) => {
           // Show only first 3 on mobile
-          if (i >= 3 && window.innerWidth < 768) return null
           return (
             <div
               key={i}
-              className='absolute w-1.5 h-1.5 bg-accent/50 rounded-full animate-float-orb-reverse'
+              className={`absolute w-1.5 h-1.5 bg-accent/50 rounded-full animate-float-orb-reverse ${i >= 3 ? 'max-md:hidden' : ''}`}
               style={{
                 right: `${10 + i * 12}%`,
                 top: `${30 + (i * 15) % 60}%`,
@@ -131,8 +130,8 @@ export default function Skills() {
         </div>
 
         {/* Skills Grid */}
-        <div className='max-w-7xl mx-auto'>
-          <div className='skills-grid grid md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        <div className='max-w-5xl mx-auto'>
+          <div className='skills-grid grid md:grid-cols-2 gap-6'>
             {skillCategories.map((category) => {
               const IconComponent = category.icon
               return (
