@@ -1,106 +1,17 @@
-import { useEffect, useRef } from 'react'
 import { Download, Mail } from 'lucide-react'
 import { useHero } from '@/hooks/useHero'
 import { headshotImage } from '@/assets'
-import gsap from 'gsap'
+import { profile } from '@/data'
 
+// Entrance animations are CSS classes (enter-left, enter-up, ...) from index.css.
+// The [--enter-...] classes set each element's delay, duration and distance,
+// matching the timings of the old GSAP version.
 export default function Hero() {
-  const { displayText, mousePosition, handleDownloadCV, handleGetInTouch } =
+  const { displayText, parallaxRef, handleDownloadCV, handleGetInTouch } =
     useHero()
-
-  const sectionRef = useRef<HTMLElement>(null)
-  const contentRef = useRef<HTMLDivElement>(null)
-  const imageRef = useRef<HTMLDivElement>(null)
-
-  // Hero entrance animations
-  useEffect(() => {
-
-    const ctx = gsap.context(() => {
-      // Content slide in from left
-      gsap.set(contentRef.current, { x: -50, opacity: 0 })
-      gsap.to(contentRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: 'power2.out',
-      })
-
-      // Image slide in from right
-      gsap.set(imageRef.current, { x: 50, opacity: 0 })
-      gsap.to(imageRef.current, {
-        x: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: 'power2.out',
-      })
-
-      // Main heading - fade in
-      const mainHeading = document.querySelector('.hero-main-heading')
-      if (mainHeading) {
-        gsap.set(mainHeading, { y: 30, opacity: 0 })
-        gsap.to(mainHeading, {
-          y: 0,
-          opacity: 1,
-          duration: 1,
-          delay: 0.2,
-          ease: 'power3.out',
-        })
-      }
-
-      // Typewriter container - slide up
-      const typewriterContainer = document.querySelector('.hero-typewriter')
-      if (typewriterContainer) {
-        gsap.set(typewriterContainer, { y: 20, opacity: 0 })
-        gsap.to(typewriterContainer, {
-          y: 0,
-          opacity: 1,
-          duration: 0.8,
-          delay: 0.6,
-          ease: 'power2.out',
-        })
-      }
-
-      // Supporting text - fade in
-      const supportingText = document.querySelectorAll('.hero-supporting-text')
-      gsap.set(supportingText, { opacity: 0 })
-      gsap.to(supportingText, {
-        opacity: 1,
-        duration: 0.8,
-        stagger: 0.2,
-        delay: 0.9,
-        ease: 'power2.out',
-      })
-
-      // CTA Buttons - pop in
-      const ctaButtons = document.querySelector('.hero-cta-buttons')
-      if (ctaButtons) {
-        gsap.set(ctaButtons, { y: 20, opacity: 0 })
-        gsap.to(ctaButtons, {
-          y: 0,
-          opacity: 1,
-          duration: 0.6,
-          delay: 1.3,
-          ease: 'power2.out',
-        })
-      }
-
-      // Image itself - gentle fade
-      const heroImage = document.querySelector('.hero-image')
-      gsap.set(heroImage, { opacity: 0 })
-      gsap.to(heroImage, {
-        opacity: 1,
-        duration: 1,
-        delay: 0.2,
-        ease: 'power2.out',
-      })
-    }, sectionRef)
-
-    return () => ctx.revert()
-  }, [])
 
   return (
     <section
-      ref={sectionRef}
       id='home'
       className='min-h-screen flex items-center justify-center px-6 md:px-12 pt-24 md:pt-20 lg:pt-16 relative overflow-hidden'
     >
@@ -132,11 +43,10 @@ export default function Hero() {
             ]
             const pos = positions[i] || { left: 10, top: 50 }
             // Show only first 4 on mobile
-            if (i >= 4 && window.innerWidth < 768) return null
             return (
               <div
                 key={i}
-                className={`absolute rounded-full bg-primary/30 animate-hero-particle-${(i % 4) + 1}`}
+                className={`absolute rounded-full bg-primary/30 animate-hero-particle-${(i % 4) + 1} ${i >= 4 ? 'max-md:hidden' : ''}`}
                 style={{
                   width: `${8 + (i % 3) * 4}px`,
                   height: `${8 + (i % 3) * 4}px`,
@@ -150,17 +60,16 @@ export default function Hero() {
 
       <div className='container mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center relative z-10'>
         {/* Left Column - Content */}
-        <div
-          ref={contentRef}
-          className='space-y-8 text-center lg:text-left order-2 lg:order-1'
-        >
+        <div className='enter-left space-y-8 text-center lg:text-left order-2 lg:order-1'>
           {/* Headline with Typewriter */}
           <div className='space-y-4'>
-            <h1 className='hero-main-heading text-3xl md:text-6xl lg:text-7xl font-bold tracking-tight'>
+            <h1 className='enter-up [--enter-distance:30px] [--enter-duration:1s] [--enter-delay:0.2s] text-3xl md:text-6xl lg:text-7xl font-bold tracking-tight'>
               I'm <span className='text-primary'>Muhannad</span>
             </h1>
-            <div className='hero-typewriter text-3xl md:text-6xl lg:text-7xl font-bold tracking-tight lg:whitespace-nowrap'>
-              <span className='text-foreground min-h-[1.2em] inline-block'>
+            <div className='enter-up [--enter-delay:0.6s] text-3xl md:text-6xl lg:text-7xl font-bold tracking-tight lg:whitespace-nowrap'>
+              {/* Screen readers get one fixed title instead of the retyping text */}
+              <span className='sr-only'>{profile.title}</span>
+              <span className='text-foreground min-h-[1.2em] inline-block' aria-hidden='true'>
                 {displayText}
                 <span className='animate-pulse text-primary'>|</span>
               </span>
@@ -169,25 +78,23 @@ export default function Hero() {
 
           {/* Supporting Text */}
           <div className='space-y-6 text-lg md:text-xl text-foreground/80 max-w-2xl'>
-            <p className='hero-supporting-text'>
-              I design and implement polished — focused on{' '}
-              <span className='text-primary font-semibold'>clarity</span>,{' '}
-              <span className='text-primary font-semibold'>motion</span>, and{' '}
-              <span className='text-primary font-semibold'>performance</span>.
+            <p className='enter-fade [--enter-delay:0.9s]'>
+              Frontend developer with{' '}
+              <span className='text-foreground font-semibold'>2+ years</span>{' '}
+              of experience building production web apps with{' '}
+              <span className='text-primary font-semibold'>React</span>,{' '}
+              <span className='text-primary font-semibold'>Next.js</span> and{' '}
+              <span className='text-primary font-semibold'>TypeScript</span>.
             </p>
-            <p className='hero-supporting-text'>
-              I transform{' '}
-              <span className='text-primary font-semibold'>ideas</span> into
-              <span className='text-foreground font-semibold'>
-                {' '}
-                exceptional digital experiences{' '}
-              </span>
-              that engage users and drive results.
+            <p className='enter-fade [--enter-delay:1.1s]'>
+              I built the{' '}
+              <span className='text-primary font-semibold'>internal systems</span>{' '}
+              behind daily operations at a freight and logistics company.
             </p>
           </div>
 
           {/* CTA Buttons */}
-          <div className='hero-cta-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start'>
+          <div className='enter-up [--enter-duration:0.6s] [--enter-delay:1.3s] flex flex-col sm:flex-row gap-4 justify-center lg:justify-start'>
             <button
               onClick={handleGetInTouch}
               className='group relative px-8 py-4 bg-primary text-primary-foreground rounded-xl font-medium text-lg overflow-hidden transition-all duration-300 ease-out hover:shadow-lg hover:shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] cursor-pointer'
@@ -213,14 +120,11 @@ export default function Hero() {
         </div>
 
         {/* Right Column - Image */}
-        <div
-          ref={imageRef}
-          className='flex justify-center order-1 lg:order-2'
-        >
+        <div className='enter-right flex justify-center order-1 lg:order-2'>
           <div
+            ref={parallaxRef}
             className='relative'
             style={{
-              transform: `translate(${mousePosition.x * 0.3}px, ${mousePosition.y * 0.3}px)`,
               transition: 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)',
             }}
           >
@@ -242,13 +146,13 @@ export default function Hero() {
             </>
 
             {/* Main Image Container */}
-            <div className='hero-image relative bg-linear-to-br from-background/50 to-muted/30 border border-border/50 rounded-3xl p-2 shadow-2xl'>
+            <div className='enter-fade [--enter-duration:1s] [--enter-delay:0.2s] relative bg-linear-to-br from-background/50 to-muted/30 border border-border/50 rounded-3xl p-2 shadow-2xl'>
               <div className='absolute inset-[-18px] rounded-4xl border border-primary/25 blur-sm' />
               <div className='relative group overflow-hidden rounded-2xl border-2 border-primary/90'>
                 <img
-                  src={headshotImage}
-                  srcSet={`${headshotImage}?w=400 400w, ${headshotImage}?w=600 600w, ${headshotImage}?w=800 800w`}
-                  sizes="(max-width: 640px) 400px, (max-width: 1024px) 600px, 800px"
+                  src={headshotImage.src}
+                  srcSet={headshotImage.srcSet}
+                  sizes='(max-width: 480px) calc(100vw - 64px), 448px'
                   alt='Muhannad Al-Srahen - Frontend Developer'
                   className='w-full max-w-md object-cover aspect-[4/5] group-hover:scale-105 transition-transform duration-400 ease-out'
                   width='400'

@@ -1,20 +1,19 @@
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { Menu, X, Sun, Moon } from 'lucide-react'
 import { useTheme } from '@/contexts/ThemeContext'
-import { navItems, socialLinks } from '@/config/navigation'
+import { navItems } from '@/config/navigation'
+import { socialLinks } from '@/data'
 import { cn } from '@/lib/utils'
 import { logoDark, logoLight } from '@/assets'
-import gsap from 'gsap'
 
 export default function Navbar() {
-  const { theme, toggleTheme } = useTheme()
+  const { resolvedTheme, toggleTheme } = useTheme()
   const [isScrolled, setIsScrolled] = useState(false)
   const [activeSection, setActiveSection] = useState('home')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [hideOnMobile, setHideOnMobile] = useState(false)
   const manualActiveRef = useRef<string | null>(null)
   const lastScrollY = useRef(0)
-  const navbarRef = useRef<HTMLDivElement>(null)
   const wasScrolledRef = useRef(false)
 
   // Scroll detection with mobile hide/show - optimized for smoothness
@@ -24,17 +23,9 @@ export default function Navbar() {
       const nowScrolled = currentScrollY > 60
       
       // Only update state if value actually changed
+      // (the drop-in animation when it becomes sticky is the enter-drop class below)
       if (wasScrolledRef.current !== nowScrolled) {
         setIsScrolled(nowScrolled)
-        
-        // Animate navbar when it becomes sticky
-        if (!wasScrolledRef.current && nowScrolled && navbarRef.current) {
-          gsap.fromTo(
-            navbarRef.current,
-            { y: -20, opacity: 0, scale: 0.95 },
-            { y: 0, opacity: 1, scale: 1, duration: 0.4, ease: 'power2.out' }
-          )
-        }
         wasScrolledRef.current = nowScrolled
       }
 
@@ -136,18 +127,17 @@ export default function Navbar() {
         )}
       >
         <div
-          ref={navbarRef}
           className={cn(
             'transition-all duration-300',
             isScrolled
-              ? 'mx-3 sm:mx-4 lg:mx-auto max-w-3xl mt-3 rounded-full bg-background/80 backdrop-blur-xl border border-border/60 shadow-lg'
+              ? 'enter-drop [--enter-duration:0.4s] mx-3 sm:mx-4 lg:mx-auto max-w-4xl mt-3 rounded-full bg-background/80 backdrop-blur-xl border border-border/60 shadow-lg'
               : 'border-b border-border/50 bg-background/80 backdrop-blur-lg'
           )}
         >
           <div
             className={cn(
               'flex items-center justify-between gap-4',
-              isScrolled ? 'px-4 sm:px-6 h-14 max-w-3xl mx-auto' : 'px-4 sm:px-6 h-16 max-w-4xl mx-auto'
+              isScrolled ? 'px-4 sm:px-6 h-14 max-w-4xl mx-auto' : 'px-4 sm:px-6 h-16 max-w-4xl mx-auto'
             )}
           >
             {/* Logo */}
@@ -157,7 +147,7 @@ export default function Navbar() {
               aria-label='Home'
             >
               <img
-                src={theme === 'dark' ? logoLight : logoDark}
+                src={resolvedTheme === 'dark' ? logoLight : logoDark}
                 alt='Logo'
                 className='h-9 w-9 sm:h-10 sm:w-10 object-contain transition-transform duration-200 ease-out'
               />
@@ -196,7 +186,7 @@ export default function Navbar() {
                 className='group p-2.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer'
                 aria-label='Toggle theme'
               >
-                {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+                {resolvedTheme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
               </button>
 
               {/* Mobile Menu Button */}
@@ -233,7 +223,7 @@ export default function Navbar() {
         {/* Header */}
         <div className='flex items-center justify-between px-5 py-4 border-b border-border/50'>
           <img
-            src={theme === 'dark' ? logoLight : logoDark}
+            src={resolvedTheme === 'dark' ? logoLight : logoDark}
             alt='Logo'
             className='h-8 w-8 object-contain'
           />
@@ -284,9 +274,9 @@ export default function Navbar() {
               onClick={toggleTheme}
               className='flex items-center gap-2 px-3 py-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-white/5 dark:hover:bg-white/10 transition-all duration-200 cursor-pointer text-sm'
             >
-              {theme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
+              {resolvedTheme === 'dark' ? <Sun size={16} /> : <Moon size={16} />}
               <span className='font-medium'>
-                {theme === 'dark' ? 'Light' : 'Dark'}
+                {resolvedTheme === 'dark' ? 'Light' : 'Dark'}
               </span>
             </button>
           </div>

@@ -1,26 +1,111 @@
 import { useEffect, useRef, useState } from 'react'
-import { ExternalLink, Github, X, Grid3x3, ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
+import { createPortal } from 'react-dom'
+import { ExternalLink, Github, X, Grid3x3, ChevronLeft, ChevronRight, RotateCcw, Lock, AppWindow, ZoomIn } from 'lucide-react'
 import { projects } from '@/data'
-import type { Project } from '@/types'
-import { SectionHeader, FlyingOrbs } from '@/components/common'
+import type { Project, ResponsiveImage } from '@/types'
+import { SectionHeader, FlyingOrbs, ImageLightbox } from '@/components/common'
 
-// Image Gallery Component with arrows
-function ImageGallery({ images, title }: { images: string[]; title: string }) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [touchStart, setTouchStart] = useState(0)
-  const [touchEnd, setTouchEnd] = useState(0)
+// How wide each gallery is on screen, so the browser can pick the right file
+// from srcSet: timeline image column, and the smaller flip cards in the modal.
+const GALLERY_SIZES = {
+  timeline: '(min-width: 1024px) 544px, calc(100vw - 48px)',
+  card: '(min-width: 1024px) 430px, (min-width: 768px) 50vw, calc(100vw - 32px)',
+}
 
-  // Handle empty images array for coming soon projects
-  if (!images || images.length === 0) {
+// Button and badge styles for the two places links appear:
+// 'sm' on the back of the flip cards in the modal, 'lg' on the main timeline
+const linkStyles = {
+  sm: {
+    wrapper: 'flex gap-2 mb-2',
+    icon: 'w-4 h-4',
+    live: 'flex-1 bg-primary hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.02] text-black font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-sm',
+    code: 'flex-1 bg-muted hover:bg-muted/60 hover:border-primary/50 hover:shadow-md hover:scale-[1.02] border border-border text-foreground font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-sm',
+    badge: 'flex-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-primary/10 border border-primary/30 rounded-xl text-primary font-semibold text-sm',
+    liveLabel: 'Live Demo',
+    codeLabel: 'Code',
+  },
+  lg: {
+    wrapper: 'flex gap-4 pt-2',
+    icon: 'w-5 h-5',
+    // sm:max-w-xs keeps a lone button from stretching across the whole column
+    live: 'flex-1 sm:max-w-xs bg-primary hover:bg-primary/90 text-black font-bold px-6 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/40 hover:scale-105',
+    code: 'flex-1 sm:max-w-xs bg-card hover:bg-muted border-2 border-border hover:border-primary/50 text-foreground font-bold px-6 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105',
+    badge: 'inline-flex items-center gap-2 px-6 py-4 bg-primary/10 border-2 border-primary/30 rounded-xl text-primary font-bold',
+    liveLabel: 'View Project',
+    codeLabel: 'Source Code',
+  },
+} as const
+
+// Internal projects get a badge; public ones get only the buttons that have a URL
+function ProjectLinks({ project, size }: { project: Project; size: 'sm' | 'lg' }) {
+  const styles = linkStyles[size]
+  // Stop clicks from also flipping the card in the modal
+  const stopFlip = (e: React.MouseEvent) => e.stopPropagation()
+
+  if (project.isInternal) {
     return (
-      <div className='absolute inset-0 bg-linear-to-br from-muted/50 to-muted/30 flex items-center justify-center'>
-        <div className='text-center'>
-          <div className='text-6xl mb-4'>🚀</div>
-          <p className='text-sm text-muted-foreground font-medium'>Coming Soon</p>
-        </div>
+      <div className={styles.wrapper}>
+        <span className={styles.badge}>
+          <Lock className={styles.icon} />
+          Private / Internal
+        </span>
       </div>
     )
   }
+
+  if (!project.liveUrl && !project.codeUrl) return null
+
+  return (
+    <div className={styles.wrapper}>
+      {project.liveUrl && (
+        <a href={project.liveUrl} target='_blank' rel='noopener noreferrer' className={styles.live} onClick={stopFlip}>
+          <ExternalLink className={styles.icon} />
+          {styles.liveLabel}
+        </a>
+      )}
+      {project.codeUrl && (
+        <a href={project.codeUrl} target='_blank' rel='noopener noreferrer' className={styles.code} onClick={stopFlip}>
+          <Github className={styles.icon} />
+          {styles.codeLabel}
+        </a>
+      )}
+    </div>
+  )
+}
+
+// Shows the screenshot gallery, or a placeholder when there are no screenshots
+function ProjectMedia({ project, sizes }: { project: Project; sizes: string }) {
+  if (project.images.length > 0) {
+    return <ImageGallery images={project.images} title={project.title} sizes={sizes} />
+  }
+
+  const PlaceholderIcon = project.isInternal ? Lock : AppWindow
+  return (
+    <div className='absolute inset-0 bg-linear-to-br from-muted/50 to-muted/30 flex items-center justify-center p-6'>
+      <div className='text-center'>
+        <PlaceholderIcon className='w-12 h-12 text-primary/70 mx-auto mb-4' />
+        <p className='text-sm text-muted-foreground font-medium'>
+          {project.isInternal ? 'Internal system: screenshots are private' : project.title}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+// Image Gallery Component with arrows
+function ImageGallery({
+  images,
+  title,
+  sizes,
+}: {
+  images: ResponsiveImage[]
+  title: string
+  sizes: string
+}) {
+  const [currentIndex, setCurrentIndex] = useState(0)
+  const [touchStart, setTouchStart] = useState(0)
+  const [touchEnd, setTouchEnd] = useState(0)
+  const [isViewerOpen, setIsViewerOpen] = useState(false)
 
   const nextImage = (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -67,18 +152,44 @@ function ImageGallery({ images, title }: { images: string[]; title: string }) {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <img
-        src={images[currentIndex]}
-        srcSet={`${images[currentIndex]}?w=600 600w, ${images[currentIndex]}?w=900 900w, ${images[currentIndex]}?w=1200 1200w`}
-        sizes='(max-width: 768px) 600px, (max-width: 1024px) 900px, 1200px'
-        alt={`${title} - Image ${currentIndex + 1}`}
-        className='w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110'
-        style={{ minHeight: '100%' }}
-        loading='lazy'
-      />
-      
-      {/* Dark overlay - only on hover */}
-      <div className='absolute inset-0 bg-transparent group-hover/gallery:bg-black/40 transition-all duration-300 pointer-events-none' />
+      {/* Clicking the screenshot opens it full size */}
+      <button
+        type='button'
+        onClick={(e) => {
+          e.stopPropagation() // don't flip the card in the modal
+          setIsViewerOpen(true)
+        }}
+        className='block w-full h-full cursor-zoom-in'
+        aria-label={`View ${title} image ${currentIndex + 1} full size`}
+      >
+        <img
+          src={images[currentIndex].src}
+          srcSet={images[currentIndex].srcSet}
+          sizes={sizes}
+          alt={`${title} - Image ${currentIndex + 1}`}
+          className='w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-110'
+          style={{ minHeight: '100%' }}
+          loading='lazy'
+          decoding='async'
+        />
+      </button>
+
+      {/* Dark overlay with a zoom hint - only on hover */}
+      <div className='absolute inset-0 flex items-center justify-center bg-transparent group-hover/gallery:bg-black/40 transition-all duration-300 pointer-events-none'>
+        <ZoomIn className='w-10 h-10 text-white opacity-0 group-hover/gallery:opacity-100 transition-opacity duration-300' />
+      </div>
+
+      {isViewerOpen && (
+        <ImageLightbox
+          images={images}
+          title={title}
+          startIndex={currentIndex}
+          onClose={(lastIndex) => {
+            setCurrentIndex(lastIndex) // keep the gallery on the image that was being viewed
+            setIsViewerOpen(false)
+          }}
+        />
+      )}
       
       {/* Navigation Arrows - Only show on desktop hover */}
       {images.length > 1 && (
@@ -142,13 +253,15 @@ function FlipCard({ project }: { project: Project }) {
       >
           {/* Image Gallery */}
           <div className='relative h-40 sm:h-48 overflow-hidden bg-muted/20'>
-            <ImageGallery images={project.images} title={project.title} />
-            
+            <ProjectMedia project={project} sizes={GALLERY_SIZES.card} />
+
             {/* Badges */}
             <div className='absolute top-3 left-3 flex gap-2 z-20'>
-              <span className='px-2.5 py-1 bg-primary/90 backdrop-blur-sm text-black text-xs font-bold rounded-full'>
-                {project.year}
-              </span>
+              {project.year && (
+                <span className='px-2.5 py-1 bg-primary/90 backdrop-blur-sm text-black text-xs font-bold rounded-full'>
+                  {project.year}
+                </span>
+              )}
               <span className='px-2.5 py-1 bg-accent/90 backdrop-blur-sm text-white text-xs font-bold rounded-full'>
                 {project.category}
               </span>
@@ -228,59 +341,40 @@ function FlipCard({ project }: { project: Project }) {
                     key={index}
                     className='flex items-start gap-2 text-sm text-muted-foreground'
                   >
-                    <span className='text-primary shrink-0'>✦</span>
+                    <span className='text-primary shrink-0' aria-hidden='true'>✦</span>
                     <span className='leading-snug'>{highlight}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* TECHNOLOGIES */}
-            <div className='py-3'>
-              <h4 className='text-sm font-bold text-foreground uppercase tracking-wide mb-2 flex items-center gap-2'>
-                <span className='w-1 h-4 bg-primary rounded-full'></span>
-                Technologies
-              </h4>
-              <div className='flex flex-wrap gap-1.5'>
-                {project.technologies.map((tech) => {
-                  const Icon = tech.icon
-                  return (
-                    <div
-                      key={tech.name}
-                      className='inline-flex items-center gap-1 px-2 py-1 bg-primary/10 border border-primary/20 rounded-md'
-                    >
-                      <Icon className='w-4 h-4' style={{ color: tech.color }} />
-                      <span className='text-sm text-foreground'>{tech.name}</span>
-                    </div>
-                  )
-                })}
+            {/* TECHNOLOGIES (hidden while a stack is still missing) */}
+            {project.technologies.length > 0 && (
+              <div className='py-3'>
+                <h4 className='text-sm font-bold text-foreground uppercase tracking-wide mb-2 flex items-center gap-2'>
+                  <span className='w-1 h-4 bg-primary rounded-full'></span>
+                  Technologies
+                </h4>
+                <div className='flex flex-wrap gap-1.5'>
+                  {project.technologies.map((tech) => {
+                    const Icon = tech.icon
+                    return (
+                      <div
+                        key={tech.name}
+                        className='inline-flex items-center gap-1 px-2 py-1 bg-primary/10 border border-primary/20 rounded-md'
+                      >
+                        <Icon className='w-4 h-4' style={{ color: tech.color }} />
+                        <span className='text-sm text-foreground'>{tech.name}</span>
+                      </div>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Action Buttons */}
             <div className='mt-auto pt-3 border-t border-primary/20'>
-              <div className='flex gap-2 mb-2'>
-                <a
-                  href={project.liveUrl || '#'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='flex-1 bg-primary hover:bg-primary/90 hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.02] text-black font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-sm'
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ExternalLink className='w-4 h-4' />
-                  Live Demo
-                </a>
-                <a
-                  href={project.codeUrl || '#'}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='flex-1 bg-muted hover:bg-muted/60 hover:border-primary/50 hover:shadow-md hover:scale-[1.02] border border-border text-foreground font-semibold px-4 py-2.5 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 text-sm'
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <Github className='w-4 h-4' />
-                  Code
-                </a>
-              </div>
+              <ProjectLinks project={project} size='sm' />
               <div className='text-center text-sm text-muted-foreground flex items-center justify-center gap-2'>
                 <RotateCcw className='w-4 h-4' />
                 <span>Click to go back</span>
@@ -365,11 +459,10 @@ export default function ProjectsNew() {
       <div className='absolute inset-0 z-0 pointer-events-none'>
         {[...Array(4)].map((_, i) => {
           // Show only first 2 on mobile
-          if (i >= 2 && window.innerWidth < 768) return null
           return (
             <div
               key={i}
-              className='absolute w-2.5 h-2.5 bg-primary/35 rounded-full animate-float-orb'
+              className={`absolute w-2.5 h-2.5 bg-primary/35 rounded-full animate-float-orb ${i >= 2 ? 'max-md:hidden' : ''}`}
               style={{
                 left: `${8 + i * 20}%`,
                 bottom: `${15 + (i * 20) % 50}%`,
@@ -455,7 +548,7 @@ export default function ProjectsNew() {
 
           {/* Projects */}
           <div className='space-y-16 sm:space-y-24 lg:space-y-32'>
-            {projects.filter(p => p.status === 'completed').map((project, index) => {
+            {projects.map((project, index) => {
               const isEven = index % 2 === 0
               return (
                 <div
@@ -465,7 +558,8 @@ export default function ProjectsNew() {
                   } [&.animate-in]:opacity-100 [&.animate-in]:translate-x-0`}
                 >
                   <div
-                    className={`grid lg:grid-cols-2 gap-8 items-start ${
+                    // lg:gap-16 leaves room in the middle for the timeline dot and its pulse
+                    className={`grid lg:grid-cols-2 gap-8 lg:gap-16 items-start ${
                       isEven ? '' : 'lg:grid-flow-dense'
                     }`}
                   >
@@ -480,14 +574,16 @@ export default function ProjectsNew() {
                     {/* Image Section */}
                     <div className={`relative group ${isEven ? '' : 'lg:col-start-2'}`}>
                       <div className='absolute -inset-4 bg-linear-to-br from-primary/30 to-accent/30 rounded-3xl blur-2xl opacity-0 md:group-hover:opacity-100 transition-all duration-700' />
-                      <div className='relative overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-border/50 md:group-hover:border-primary/50 shadow-2xl transition-all duration-500 h-[280px] sm:h-[350px] md:h-[400px]'>
-                        <ImageGallery images={project.images} title={project.title} />
-                        
+                      <div className='relative overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-border/50 md:group-hover:border-primary/50 shadow-2xl transition-all duration-500 aspect-16/10'>
+                        <ProjectMedia project={project} sizes={GALLERY_SIZES.timeline} />
+
                         {/* Floating Tags */}
                         <div className='absolute top-6 left-6 flex gap-2 z-20'>
-                          <span className='px-3 py-1.5 bg-primary/90 backdrop-blur-sm text-black text-xs font-bold rounded-full'>
-                            {project.year}
-                          </span>
+                          {project.year && (
+                            <span className='px-3 py-1.5 bg-primary/90 backdrop-blur-sm text-black text-xs font-bold rounded-full'>
+                              {project.year}
+                            </span>
+                          )}
                           <span className='px-3 py-1.5 bg-accent/90 backdrop-blur-sm text-white text-xs font-bold rounded-full'>
                             {project.category}
                           </span>
@@ -534,8 +630,9 @@ export default function ProjectsNew() {
                             className='bg-card/60 backdrop-blur-sm border border-border/50 rounded-lg sm:rounded-xl p-3 sm:p-4 hover:border-primary/50 hover:bg-card/80 transition-all duration-300 flex flex-col gap-2 hover:scale-105'
                           >
                             <div className='flex items-start gap-2'>
-                              <span className='text-primary text-xl mt-0.5'>✦</span>
-                              <span className='text-sm text-muted-foreground leading-snug'>
+                              {/* Same line height as the text so the star lines up with the first line */}
+                              <span className='text-primary text-base leading-5 shrink-0' aria-hidden='true'>✦</span>
+                              <span className='text-sm text-muted-foreground leading-5'>
                                 {highlight}
                               </span>
                             </div>
@@ -543,45 +640,28 @@ export default function ProjectsNew() {
                         ))}
                       </div>
 
-                      {/* Tech Stack Pills */}
-                      <div className='flex flex-wrap gap-2'>
-                        {project.technologies.map((tech) => {
-                          const Icon = tech.icon
-                          return (
-                            <div
-                              key={tech.name}
-                              className='inline-flex items-center gap-2 px-4 py-2 bg-card/80 backdrop-blur-md border border-border/50 rounded-xl hover:border-primary/50 hover:scale-105 transition-all duration-300'
-                            >
-                              <Icon className='w-4 h-4' style={{ color: tech.color }} />
-                              <span className='text-sm font-medium text-foreground'>
-                                {tech.name}
-                              </span>
-                            </div>
-                          )
-                        })}
-                      </div>
+                      {/* Tech Stack Pills (hidden while a stack is still missing) */}
+                      {project.technologies.length > 0 && (
+                        <div className='flex flex-wrap gap-2'>
+                          {project.technologies.map((tech) => {
+                            const Icon = tech.icon
+                            return (
+                              <div
+                                key={tech.name}
+                                className='inline-flex items-center gap-2 px-4 py-2 bg-card/80 backdrop-blur-md border border-border/50 rounded-xl hover:border-primary/50 hover:scale-105 transition-all duration-300'
+                              >
+                                <Icon className='w-4 h-4' style={{ color: tech.color }} />
+                                <span className='text-sm font-medium text-foreground'>
+                                  {tech.name}
+                                </span>
+                              </div>
+                            )
+                          })}
+                        </div>
+                      )}
 
                       {/* CTA Buttons */}
-                      <div className='flex gap-4 pt-2'>
-                        <a
-                          href={project.liveUrl || '#'}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className='flex-1 bg-primary hover:bg-primary/90 text-black font-bold px-6 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/40 hover:scale-105'
-                        >
-                          <ExternalLink className='w-5 h-5' />
-                          View Project
-                        </a>
-                        <a
-                          href={project.codeUrl || '#'}
-                          target='_blank'
-                          rel='noopener noreferrer'
-                          className='flex-1 bg-card hover:bg-muted border-2 border-border hover:border-primary/50 text-foreground font-bold px-6 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 hover:scale-105'
-                        >
-                          <Github className='w-5 h-5' />
-                          Source Code
-                        </a>
-                      </div>
+                      <ProjectLinks project={project} size='lg' />
                     </div>
                   </div>
                 </div>
@@ -603,8 +683,9 @@ export default function ProjectsNew() {
         </div>
       </div>
 
-      {/* All Projects Modal - Rendered as Portal-like fixed overlay */}
-      {showAllProjects && (
+      {/* All Projects Modal. createPortal renders it straight into <body>, outside
+          <main>: otherwise <main>'s stacking layer kept it under the footer. */}
+      {showAllProjects && createPortal(
         <div
           className={`fixed inset-0 z-9999 flex items-start sm:items-center justify-center p-0 sm:p-4 md:p-6 backdrop-blur-lg transition-all duration-300 ${
             isClosing ? 'bg-black/0 opacity-0' : 'bg-black/60 opacity-100'
@@ -652,7 +733,8 @@ export default function ProjectsNew() {
                 </div>
               </div>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
     </section>
   )

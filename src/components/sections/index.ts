@@ -1,7 +1,4 @@
 // Section Components - Main page sections
-// Note: Projects and Contact are lazy-loaded in App.tsx, so they're not exported here
-// to avoid Vite warnings about dynamic imports not moving to separate chunks
+// Note: every section except Hero is lazy-loaded in App.tsx, so they are not
+// exported here (a static export would pull them back into the main bundle)
 export { default as Hero } from './Hero'
-export { default as About } from './About'
-export { default as Skills } from './Skills'
-export { default as Projects } from './Projects'

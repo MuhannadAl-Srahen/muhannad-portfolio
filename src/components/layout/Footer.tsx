@@ -1,34 +1,43 @@
 import { useState, useEffect } from 'react'
-import { ArrowUp, Github, Linkedin, Instagram, Twitter } from 'lucide-react'
-import { socialLinks } from '@/config/navigation'
+import { ArrowUp } from 'lucide-react'
+import { socialLinks } from '@/data'
 import { useTheme } from '@/contexts/ThemeContext'
 import { logoDark, logoLight } from '@/assets'
-import type { LucideIcon } from 'lucide-react'
 
 export default function Footer() {
-  const { theme } = useTheme()
+  const { resolvedTheme } = useTheme()
   const [showBackToTop, setShowBackToTop] = useState(false)
   const [scrollProgress, setScrollProgress] = useState(0)
   const [isModalOpen, setIsModalOpen] = useState(false)
   const currentYear = new Date().getFullYear()
 
   useEffect(() => {
-    const handleScroll = () => {
-      const windowHeight = window.innerHeight
-      const documentHeight = document.documentElement.scrollHeight
+    let frame = 0
+
+    const updateProgress = () => {
+      const totalScroll =
+        document.documentElement.scrollHeight - window.innerHeight
       const scrollTop = window.scrollY
-      
-      // Calculate scroll percentage
-      const totalScroll = documentHeight - windowHeight
-      const progress = (scrollTop / totalScroll) * 100
-      
-      setScrollProgress(progress)
+
+      // Rounded so React skips the re-render when the visible value didn't change
+      setScrollProgress(
+        totalScroll > 0 ? Math.round((scrollTop / totalScroll) * 100) : 0
+      )
       setShowBackToTop(scrollTop > 400)
     }
 
+    // Scroll fires many times per frame; update at most once per screen frame
+    const handleScroll = () => {
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(updateProgress)
+    }
+
     window.addEventListener('scroll', handleScroll, { passive: true })
-    handleScroll() // Initial calculation
-    return () => window.removeEventListener('scroll', handleScroll)
+    updateProgress() // Initial calculation
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      cancelAnimationFrame(frame)
+    }
   }, [])
 
   // Watch for modal open/close
@@ -49,16 +58,8 @@ export default function Footer() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
-  // Map social names to Lucide icons
-  const iconMap: Record<string, LucideIcon> = {
-    GitHub: Github,
-    LinkedIn: Linkedin,
-    Twitter: Twitter,
-    Instagram: Instagram,
-  }
-
   // Determine which logo to use
-  const currentLogo = theme === 'dark' ? logoLight : logoDark
+  const currentLogo = resolvedTheme === 'dark' ? logoLight : logoDark
 
   return (
     <>
@@ -81,8 +82,8 @@ export default function Footer() {
             {/* Right: Social Links */}
             <div className='flex items-center gap-3'>
               {socialLinks.map((social) => {
-                const IconComponent = iconMap[social.name]
-                return IconComponent ? (
+                const IconComponent = social.icon
+                return (
                   <a
                     key={social.name}
                     href={social.href}
@@ -93,7 +94,7 @@ export default function Footer() {
                   >
                     <IconComponent className='w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors duration-300' />
                   </a>
-                ) : null
+                )
               })}
             </div>
           </div>

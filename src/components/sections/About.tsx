@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
-import { profileImage2 } from '@/assets'
-import { aboutStats } from '@/data'
+import { aboutImage } from '@/assets'
+import { aboutStats, profile } from '@/data'
 import { SectionHeader, FlyingOrbs, Card } from '@/components/common'
 
 export default function About() {
@@ -62,11 +62,10 @@ export default function About() {
       <div className='absolute inset-0 z-0 pointer-events-none'>
         {[...Array(5)].map((_, i) => {
           // Show only first 3 on mobile
-          if (i >= 3 && window.innerWidth < 768) return null
           return (
             <div
               key={i}
-              className='absolute w-2 h-2 bg-primary/40 rounded-full animate-float-orb'
+              className={`absolute w-2 h-2 bg-primary/40 rounded-full animate-float-orb ${i >= 3 ? 'max-md:hidden' : ''}`}
               style={{
                 left: `${15 + i * 15}%`,
                 top: `${20 + (i * 18) % 70}%`,
@@ -157,10 +156,10 @@ export default function About() {
                 <div className='absolute -inset-1 bg-linear-to-br from-primary/20 to-accent/20 rounded-2xl blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-400 ease-out' />
                 <div className='relative rounded-2xl overflow-hidden border border-border/50 shadow-xl group-hover:border-primary/30 transition-all duration-300 ease-out'>
                   <img
-                    src={profileImage2}
-                    srcSet={`${profileImage2}?w=640 640w, ${profileImage2}?w=800 800w, ${profileImage2}?w=1024 1024w`}
-                    sizes="(max-width: 640px) 640px, (max-width: 1024px) 800px, 1024px"
-                    alt='Muhannad Al-Srahen'
+                    src={aboutImage.src}
+                    srcSet={aboutImage.srcSet}
+                    sizes='(min-width: 1024px) 480px, calc(100vw - 48px)'
+                    alt={profile.name}
                     className='w-full h-[450px] lg:h-[550px] object-cover'
                     loading='lazy'
                     width='640'
@@ -171,10 +170,10 @@ export default function About() {
                   {/* Name Overlay */}
                   <div className='absolute bottom-0 left-0 right-0 p-6'>
                     <h3 className='text-2xl font-bold text-white mb-1'>
-                      Muhannad Al-Srahen
+                      {profile.name}
                     </h3>
                     <p className='text-base text-primary font-semibold'>
-                      Software Engineer
+                      {profile.title}
                     </p>
                   </div>
                 </div>
@@ -194,13 +193,13 @@ export default function About() {
                 </h3>
                 <div className='space-y-4 text-base leading-relaxed text-foreground/75'>
                   <p>
-                    I'm a <span className='text-primary font-semibold'>software engineer</span> who loves building <span className='text-primary font-semibold'>products</span> that make a difference. 
-                    I combine <span className='text-primary font-semibold'>technical expertise</span> with creative problem-solving to deliver 
-                    exceptional digital experiences.
+                    I'm a <span className='text-primary font-semibold'>frontend developer</span> with 2+ years of experience building production web applications with{' '}
+                    <span className='text-primary font-semibold'>React</span>, <span className='text-primary font-semibold'>Next.js</span>, <span className='text-primary font-semibold'>TypeScript</span> and JavaScript.
                   </p>
                   <p className='text-foreground/75'>
-                    My goal is to write <span className='text-primary font-semibold'>clean, maintainable code</span> that not only works great 
-                    but is also a joy to work with for other developers.
+                    I developed the internal systems behind daily operations at a freight and logistics company, including a{' '}
+                    <span className='text-primary font-semibold'>container yard system</span> used by 15 staff and a{' '}
+                    <span className='text-primary font-semibold'>bilingual audit system</span> that replaced Excel tracking for 15+ client companies.
                   </p>
                 </div>
               </Card>
@@ -212,10 +211,9 @@ export default function About() {
                     What I Do
                   </h4>
                   <p className='text-sm leading-relaxed text-muted-foreground'>
-                    I specialize in building <span className='text-primary font-semibold'>modern, scalable</span> web applications using <span className='text-primary font-semibold'>React</span>, 
-                    <span className='text-primary font-semibold'> TypeScript</span>, and <span className='text-primary font-semibold'>Next.js</span>. My work focuses on creating <span className='text-primary font-semibold'>user experiences</span> 
-                    that are not only <span className='text-primary font-semibold'>fast and accessible</span>, but also delightful and intuitive. 
-                    I believe great products come from attention to detail and thoughtful design.
+                    I build <span className='text-primary font-semibold'>responsive</span> and{' '}
+                    <span className='text-primary font-semibold'>bilingual (Arabic/English)</span> interfaces with React, Next.js and TypeScript, style them with Tailwind CSS and shadcn/ui, and connect them to{' '}
+                    <span className='text-primary font-semibold'>REST APIs</span>.
                   </p>
                 </Card>
 
@@ -224,11 +222,11 @@ export default function About() {
                     My Experience
                   </h4>
                   <p className='text-sm leading-relaxed text-muted-foreground'>
-                    Throughout my career, I've had the opportunity to work with <span className='text-primary font-semibold'>amazing teams</span> 
-                    at <span className='text-primary font-semibold'>ComfTech</span> and{' '}
-                    <span className='text-primary font-semibold'>eCampusJo</span>. 
-                    I've contributed to <span className='text-primary font-semibold'>projects</span> that significantly improved <span className='text-primary font-semibold'>user engagement</span>, 
-                    streamlined <span className='text-primary font-semibold'>workflows</span>, and delivered <span className='text-primary font-semibold'>real value</span> to end users.
+                    I've worked at <span className='text-primary font-semibold'>Abu Sonbul for Arab Transportation</span> and{' '}
+                    <span className='text-primary font-semibold'>eCampusJo</span>, freelanced for{' '}
+                    <span className='text-primary font-semibold'>LigaData</span> and{' '}
+                    <span className='text-primary font-semibold'>RemWay</span>, and taught frontend development at{' '}
+                    <span className='text-primary font-semibold'>KIT Jordan</span> during university.
                   </p>
                 </Card>
               </div>

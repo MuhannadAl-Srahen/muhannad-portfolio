@@ -19,8 +19,8 @@ A modern, high-performance portfolio showcasing innovative projects and technica
 
 ### 🎬 **Advanced Animations**
 
-- GSAP-powered scroll-triggered animations
-- Smooth entrance effects with stagger delays
+- Pure CSS animations (GPU-friendly, no animation library) with scroll-triggered reveals
+- Smooth entrance effects with stagger delays, respecting "reduce motion"
 - Interactive hover states and micro-interactions
 - Sticky navbar with slide-down animation
 
@@ -80,10 +80,10 @@ Experience the live version with all features, animations, and interactions.
 - **Vite 7.2.7** - Lightning-fast build tool
 - **Tailwind CSS 4.1.18** - Utility-first styling with custom design system
 
-### **Animation Libraries**
+### **Animations**
 
-- **GSAP 3.14.1** - Professional-grade animations
-- **ScrollTrigger** - Scroll-based animation triggers
+- **CSS keyframes** - Entrance and background animations (`enter-*` and `bg-orb` classes in `src/index.css`)
+- **IntersectionObserver** - Scroll-triggered reveals (`src/hooks/useRevealOnScroll.ts`)
 
 ### **Icons & UI**
 
@@ -118,8 +118,7 @@ portfolio/
 │   ├── components/
 │   │   ├── common/      # Reusable components
 │   │   ├── layout/      # Navbar, Footer
-│   │   ├── sections/    # Hero, About, Skills, Projects, Contact
-│   │   └── ui/          # UI primitives (buttons, etc.)
+│   │   └── sections/    # Hero, About, Experience, Skills, Projects, Contact
 │   ├── contexts/        # React contexts (ThemeContext)
 │   ├── data/            # Static content (projects, skills)
 │   ├── hooks/           # Custom React hooks
@@ -235,10 +234,15 @@ Edit `src/index.css` to customize color palette:
 
 ### Content
 
-- **Projects**: Edit `src/data/index.ts` → `projects` array
-- **Skills**: Edit `src/data/index.ts` → `skillCategories` array
-- **Navigation**: Edit `src/config/navigation.ts`
-- **Personal Info**: Edit `src/data/index.ts` → `aboutContent`
+All content lives in `src/data/index.ts`:
+
+- **Name and title**: `profile`
+- **Experience**: `experiences` array
+- **Projects**: `projects` array
+- **Skills**: `skillCategories` array
+- **Contact details and social links**: `contactInfo`, `contactMethods`, `socialLinks`
+- **About stats**: `aboutStats`
+- **Navigation**: `src/config/navigation.ts`
 
 ### Images
 
@@ -308,9 +312,10 @@ Contributions, issues, and feature requests are welcome!
 
 - 🌐 Website: [muhannadalsrahen.dev](https://www.muhannadalsrahen.dev)
 - 📧 Email: [muhannadalsrahen@gmail.com](mailto:muhannadalsrahen@gmail.com)
-- 💼 LinkedIn: [muhannad-alsrahen](https://linkedin.com/in/muhannad-alsrahen)
+- 💼 LinkedIn: [muhannad-alsraheen](https://www.linkedin.com/in/muhannad-alsraheen)
 - 🐙 GitHub: [MuhannadAl-Srahen](https://github.com/MuhannadAl-Srahen)
-- 🐦 Twitter: [@\_glock_x](https://twitter.com/_glock_x)
+- ✖️ X: [@\_glock_x](https://x.com/_glock_x)
+- 📸 Instagram: [@\_glock_x](https://www.instagram.com/_glock_x/)
 
 ---
 
@@ -318,7 +323,6 @@ Contributions, issues, and feature requests are welcome!
 
 - Design inspiration from modern portfolio trends
 - Icons from Lucide and React Icons
-- Animation techniques from GSAP documentation
 - Color system using OKLCH for smooth theme transitions
 
 ---

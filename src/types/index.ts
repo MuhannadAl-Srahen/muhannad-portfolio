@@ -11,6 +11,13 @@ export interface SocialLink {
   icon: React.ComponentType<{ size?: number; className?: string }>
 }
 
+// Image Types
+/** One image in several widths; the browser picks the best file from srcSet */
+export interface ResponsiveImage {
+  src: string
+  srcSet: string
+}
+
 // Project Types
 export interface ProjectTechnology {
   name: string
@@ -19,19 +26,28 @@ export interface ProjectTechnology {
 }
 
 export interface Project {
-  id: number
+  id: string
   title: string
   description: string
-  longDescription: string
-  technologies: ProjectTechnology[]
-  images: string[] // Changed from single image to array of images
+  technologies: ProjectTechnology[] // empty while the stack is still a TODO
+  images: ResponsiveImage[] // screenshots for the gallery; empty shows a placeholder
   liveUrl: string | null
   codeUrl: string | null
-  featured: boolean
-  status: 'completed' | 'in-progress' | 'coming-soon'
-  year: string
+  /** Company-internal system: no public links, shows a "Private / Internal" badge */
+  isInternal: boolean
+  year?: string
   category: string // Project category for display
   highlights: string[]
+}
+
+// Experience Types
+export interface Experience {
+  role: string
+  company: string
+  period: string
+  location: string
+  highlights: string[]
+  link?: { label: string; href: string }
 }
 
 // Skills Types
@@ -43,13 +59,19 @@ export interface Skill {
 
 export interface SkillCategory {
   icon: React.ComponentType<{ className?: string }>
-  iconColor: string
   title: string
   description: string
   skills: Skill[]
 }
 
 // Contact Types
+export interface ContactMethod {
+  label: string
+  value: string
+  href: string
+  icon: React.ComponentType<{ className?: string }>
+}
+
 export interface ContactFormData {
   name: string
   email: string
